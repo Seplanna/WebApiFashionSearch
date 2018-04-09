@@ -1,0 +1,45 @@
+{% load static %}
+
+<!-- Custom styles -->
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!-- Bootstrap-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400" rel="stylesheet">
+    <!-- Custom styles -->
+     <link rel="stylesheet" href="{% static 'style1.css' %}">
+
+    <style>
+    </style>
+
+
+</head>
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+
+                <div class="general-container1">
+                    <h1 class="title">Describe the chosen shoes.</h1>
+                    <p class="title2"> If you don't know how to fill some fields leave them empty.</p>
+                    <div class="fake_img">
+                        <div class="fake_img">
+                            <img src="{{ shoe.image.url }}" class="img-responsive">
+                        </div>
+                        <form action="" method="post" class="text-center"> {% csrf_token %}
+                            {{ form.as_p}}
+                            <div>
+                                <button type="submit", class="btn btn-primary btn-orange">
+                                    send
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+        </div>
+    </div>
+
+{% endblock %}

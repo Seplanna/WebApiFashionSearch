@@ -1,0 +1,136 @@
+html, body
+{
+    height: 100%;
+    max-height: 100%;
+}
+.top-container
+{
+    padding-top: 1%;
+}
+.general-container
+{
+    background: url('../static/img/image2.jpg');
+    height: 100%;
+    font-weight: 100;
+    line-height: 20px;
+
+}
+
+.general-container1
+{
+    background: linear-gradient( rgba(250, 250, 250, 0.7), rgba(250, 250, 250, 0.7) ),url('../static/img/image2.jpg');
+    height: 100%;
+    font-weight: 200;
+    line-height: 20px;
+
+}
+
+
+.general-container2
+{
+    background: linear-gradient( rgba(250, 250, 250, 0.7), rgba(250, 250, 250, 0.7) );
+    background-color:white;
+    height: 10%;
+    width: 80%;
+    font-weight: 200;
+    line-height: 20px;
+
+}
+
+.general-container form label
+{
+    color: black;
+}
+
+.btn-orange
+{
+    background-color: brown;
+}
+.btn-orange:hover
+{
+    background-color: darkred;
+}
+
+.btn-large {
+    border: none;
+    padding: 14px 90px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+
+.title
+{
+    color: brown;
+    text-align: center;
+}
+
+
+.title1 {
+  color: black;
+  font-size: 20px;
+    position: relative;
+    padding: 20px 0 20px 0;
+    text-align: center;
+}
+
+.title2 {
+  color:brown;
+  font-size: 20px;
+    position: relative;
+    text-align: center;
+    padding: 10px 0 10px 0;
+}
+
+
+
+.product-image-item{
+    padding: 5px;
+    margin-bottom: 5px;
+    margin-left: 100px;
+}
+
+.product-image-item1{
+}
+
+.container{
+    text-align:center;
+}
+
+.fake_img{
+    display:inline-block;
+    margin:5px 10px;
+    padding:5px;
+    border:1px solid #CCC;
+}
+
+.fake_img_no_border{
+    display:inline-block;
+    margin:5px 10px;
+    padding:5px;
+}
+
+.button_choose_shoe {
+    width:136px;
+}
+
+.outer {
+  display: table;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
+.middle {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.inner {
+  margin-left: auto;
+  margin-right: auto;
+  width: 400px;
+  /*whatever width you want*/
+}

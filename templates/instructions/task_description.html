@@ -1,0 +1,115 @@
+{% load static %}
+
+<!-- Custom styles -->
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!-- Bootstrap-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400" rel="stylesheet">
+    <!-- Custom styles -->
+     <link rel="stylesheet" href="{% static 'style2.css' %}">
+
+    <style>
+    </style>
+
+
+</head>
+<body class="general-container1">
+
+{% block content %}
+    <div >
+        <div class="row">
+            <h1 class="title">This is instruction for the task.</h1>
+
+                <div class=fake_img">
+                        <p class="title1">
+                            Thank you for participate in this user study.
+                            In this study we measure the quality of the search engine shoe fashion system,
+                            when the user has a concept in mind.
+                            In order to help us you will proceed several steps.
+                        </p>
+                        <div class=fake_img">
+                            <div class="general-container2">
+                                <h1 class="title">Step 1: Introduction</h1>
+                                <p class="title1">
+                                To avoid bias in our results we first ask you to provide some information about yourself.
+                                </p>
+                            </div>
+
+                            <div class="general-container2">
+                                <h1 class="title">Step 2: The situation</h1>
+                                <p class="title1">
+                                In the second step we describe you the hypothetical situation in which this
+                                    system can be used.
+                                </p>
+                            </div>
+
+
+
+                            <div class="general-container2">
+                                <h1 class="title">Step 3: Describe and remember</h1>
+                                <p class="title1">
+                                We show you the shoe. In the next steps you will try to find a similar shoe.
+                                    You are asked to describe and to remember it.
+                                </p>
+                            </div>
+
+
+
+                            <div class="general-container2">
+                                <h1 class="title">Step 4: Find the match</h1>
+                                <p class="title1">
+                                    We continiously show you different shoes.
+                                    Please choose ones that match by color or shape, individual or by column.
+                                    Press the "Buy" button if you find the one. You can always give up.
+
+{#                                The search session is started. It is an interactive search system.#}
+{##}
+{#                                    In each iteration some subset of shoes is shown. The subset is structured by columns.#}
+{#                                    The shoes from columns differ by shape or by color or by shape and color.#}
+{#                                    You will ask two questions: 1. to specify the column that contains shoes the most similar#}
+{#                                    to one that you try to find by color; and 2. to specify the column that contains the most similar#}
+{#                                    to one that you try to find by shape.#}
+{#                                    If you think that columns differ only by color, you should answer the first question and#}
+{#                                    provide answer "I don't know" to the second question.#}
+{#                                    If you think that columns differ only by shape, you should answer the second question and#}
+{#                                    provide answer "I don't know" to the fist question.#}
+{#                                    If you think that shoes in columns differ both by color and shape you should answer both questions.#}
+{##}
+{#                                    Moreover, if you see the pair of shoes, that is similar enough to the one that you want to find,#}
+{#                                    you should push the button "Buy something from the shown shoes".#}
+{##}
+{#                                    Also, you have an option to leave the search session by pushing the button "Finish".#}
+{#                                    You should use this option if you think#}
+{#                                    that you will not find similar shoes.#}
+                                </p>
+                            </div>
+                            <div class="general-container2">
+                                <h1 class="title">Step 5: Describe the difference</h1>
+                                <p class="title1">
+                                In the last step you will describe the difference between the best match and the desiered shoe.
+                                </p>
+                            </div>
+                        </div>
+
+
+
+
+                    <div>
+                        <form action="/landing/" method="get" class="text-center">  {% csrf_token %}
+                            <button type="submit", class="btn btn-primary btn-orange btn-large">
+                                I understand this!
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+</body>

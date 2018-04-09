@@ -1,0 +1,82 @@
+{% load static %}
+
+<!-- Custom styles -->
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!-- Bootstrap-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400" rel="stylesheet">
+    <!-- Custom styles -->
+     <link rel="stylesheet" href="{% static 'style2.css' %}">
+
+    <style>
+    </style>
+
+
+</head>
+
+<body class="general-container1">
+
+{% block content %}
+    <div>
+        <div class="row">
+            <h1 class="title">{{ title }}</h1>
+
+                    {%if saw_shoe_description %}
+                        <p class="title1">
+                            This is the shoe you saw.<br>
+                            The objective is to find and buy something similar.<br>
+                            Please remember this image, you will be asked to look for similar shoes in later steps,
+                            but you will not have access to this images again.<br>
+                            Please describe what you see. There are no options for your answers.
+                            Please answer by your own words.<br>
+
+                        </p>
+                    {% endif %}
+                    {%if chosen_shoe_description %}
+                        <p class="title1">
+                            This is the shoe you chose.<br>
+                            Please change the value of the fields if they have wrong value.<br>
+                        </p>
+                    {% endif %}
+{#                    <ul>#}
+{#                        <li>This is the show you saw.</li>#}
+{#                        <li>The objective is to find and buy something similar.</li>#}
+{#                        <li>Please describe what you see.</li>#}
+{#                        <li>Please remember this image, you will be asked to look for similar shoes in later steps,#}
+{#                            but you will not have access to this images again.</li>#}
+{#                    </ul>#}
+
+                    <div class="col-md-3"></div>
+                    <div class="fake_img general_container2 col-md-6">
+                        <div>
+                            <div class="col-md-4"></div>
+
+                            <div class="col-md-4">
+                                <div class="fake_img">
+                                    <img src="{{ shoe.image.url }}" class="img-responsive">
+                                </div>
+                            </div>
+
+                            <div class="col-md-4"></div>
+                        </div>
+                        <div style="clear:both"></div>
+
+                        <form action="" method="post" class="text-center"> {% csrf_token %}
+                            {{ form.as_p }}
+                            <div>
+                                <button type="submit", class="btn btn-primary btn-orange">
+                                    send
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="col-md-3"></div>
+        </div>
+    </div>
+
+{% endblock %}
+</body>

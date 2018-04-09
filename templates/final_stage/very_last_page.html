@@ -1,0 +1,45 @@
+{% load static %}
+
+<!-- Custom styles -->
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!-- Bootstrap-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400" rel="stylesheet">
+    <!-- Custom styles -->
+     <link rel="stylesheet" href="{% static 'style2.css' %}">
+
+    <style>
+    </style>
+
+
+</head>
+
+<body class="general-container1 ">
+
+{% block content %}
+    <div>
+        <div class="row">
+            <h1 class="title2">Thank you for paticipating in this user study!</br>
+                You did a a great job! </br>
+                You can finish now.
+                But if you want to have 5 more search session, you can do it, just push the button.
+            </h1>
+
+        <div style="margin:121px">
+            <form action="/shoes/{{new_shoes_id}}/{{user_id}}" method="get" class="text-center"> {% csrf_token %}
+                <button type="submit" class="btn btn-primary btn-orange">
+                   5 more sessions!
+                </button>
+            </form>
+        </div>
+
+    </div>
+
+
+
+{% endblock %}
+
+</body>

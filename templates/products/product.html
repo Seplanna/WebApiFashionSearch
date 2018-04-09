@@ -1,0 +1,61 @@
+{% load static %}
+
+<!-- Custom styles -->
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!-- Bootstrap-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400" rel="stylesheet">
+    <!-- Custom styles -->
+     <link rel="stylesheet" href="{% static 'style1.css' %}">
+
+    <style>
+    </style>
+
+
+</head>
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="general-container1">
+
+                <h1 class="title">Please read carefully the task.</h1>
+
+            <div class="col-md-4">
+                <h1 class="title">Imagine situation</h1>
+                    <p class="title1">
+                    Imagine that you have a good friend who will have a birthday next week.
+                    But you were very busy and have not yet bought a gift for him.
+                    Crossing the street, you suddenly saw a running man in shoes, which your friend loves.
+                    The man was running so fast that you did not have time to take a picture of these shoes.
+                    Now you want to buy the similar shoes in the online store to your friend as a gift.
+                </p>
+            </div>
+
+            <div class="col-md-4">
+                <h1 class="title">These shoes you saw.</h1>
+                <div class="product-image-item">
+                    <img src="{{ shoe.image.url }}" class="img-responsive">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h1 class="title"> Describe them.</h1>
+                <p class="title2"> If you don't know how to fill some fields leave them empty.</p>
+                 <form action="" method="post" class="text-center"> {% csrf_token %}
+                    {{ form.as_p}}
+                     <div>
+                        <button type="submit", class="btn btn-primary btn-orange">
+                            send
+                        </button>
+                     </div>
+
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

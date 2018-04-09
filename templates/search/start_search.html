@@ -1,0 +1,55 @@
+{% load static %}
+
+<!-- Custom styles -->
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!-- Bootstrap-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400" rel="stylesheet">
+    <!-- Custom styles -->
+     <link rel="stylesheet" href="{% static 'style2.css' %}">
+
+    <style>
+    </style>
+
+
+</head>
+
+
+<body class="general-container1">
+{% block content %}
+            <h1 class="title">Step 4: Find the match</h1>
+            <p class="title1">
+                It is an interactive search system.<br>
+                In each iteration some subset of shoes is shown. The subset is structured by columns.<br>
+                The shoes from columns differ by some feature. Try to guess it.<br>
+                If you see the good match push the button "Buy something!" in the bottom of the page.<br>
+                if you think that you will not find similar shoes push the button "I give up!" in the bottom of the page.<br>
+            </p>
+
+
+                                <div>
+                                    <form action="/search/{{game_id}}/" method="get" class="text-center"> {% csrf_token %}
+                                    <div>
+                                        <button type="submit" name="NEXT" class="btn btn-primary btn-orange btn-large btn-center">
+                                        Start the search session!
+                                        </button>
+                                    </div>
+
+                                    </form>
+                                </div>
+
+
+
+
+                </div>
+              </div>
+            </div>
+
+        </div>
+
+
+{% endblock %}
+</body>

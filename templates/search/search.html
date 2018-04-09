@@ -1,0 +1,110 @@
+{% load static %}
+
+<!-- Custom styles -->
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!-- Bootstrap-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require-jquery/0.25.0/require-jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400" rel="stylesheet">
+    <!-- Custom styles -->
+     <link rel="stylesheet" href="{% static 'style2.css' %}">
+
+    <style>
+    </style>
+
+
+</head>
+
+<body class="general-container1">
+
+{% block content %}
+
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $('button').click(function(){
+            $('.general-container1').children().fadeOut("fast");
+        });
+    });
+    </script>
+
+        <div >
+            <div class="row">
+                <h1 class="title2">{{ title }}</h1>
+                <h1 class="title2"> DON'T PUSH THE BUTTON "GO BACK" IN YOUR BROWSER!!!</h1>
+                <div class="container" style="width:970px">
+
+                    {% for line in imgs %}
+                        <div class="fake_img">
+                            {% for image_item in line %}
+                                <img src="{{ image_item.image.url }}" class="img-responsive">
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+
+                </div>
+                <div class="container" style="width:970px">
+                    {% for value in values %}
+                        <div class="fake_img_no_border">
+                            <form action="" method="get" class="text-center"> {% csrf_token %}
+                                <div>
+                                    <button type="submit" value="{{value}}" name="NEXT" class="btn btn-primary btn-orange button_choose_shoe">
+                                    {{ value}}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    {% endfor %}
+                    <div class="fake_img_no_border">
+                        <form action="" method="get" class="text-center"> {% csrf_token %}
+                            <div>
+                                <button type="submit" value="SKIP" name="NEXT" class="btn btn-primary btn-orange">
+                                Don't know which column
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+
+
+
+                <div class="container">
+                    <div class="fake_img_no_border">
+
+                        <form action="" method="get" class="text-center"> {% csrf_token %}
+                             <div>
+                                <button type="submit" value="1" name="BUY" class="btn btn-primary btn-orange btn-large">
+                                    Buy something!
+                                </button>
+                             </div>
+
+                        </form>
+                    </div>
+                    <div class="fake_img_no_border">
+
+                        <form action="" method="get" class="text-center"> {% csrf_token %}
+                            <div>
+                             <div>
+                                <button type="submit" value="1" name="FINISH" class="btn btn-primary btn-orange btn-large">
+                                    I give up!
+                                </button>
+                             </div>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+
+
+{% endblock %}
+
+
+</body>

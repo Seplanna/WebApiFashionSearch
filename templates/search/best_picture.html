@@ -1,0 +1,70 @@
+{% load static %}
+
+<!-- Custom styles -->
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!-- Bootstrap-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400" rel="stylesheet">
+    <!-- Custom styles -->
+     <link rel="stylesheet" href="{% static 'style1.css' %}">
+
+    <style>
+    </style>
+
+
+</head>
+
+<body class="general-container1">
+
+{% block content %}
+
+        <div>
+            <div class="row">
+                {% if game_notsucseess %}
+                    <h1 class="title2">
+                    We understand that you want to finish the search system.
+                        But please answer two more questions to help us.
+                    </h1>
+                {% endif %}
+
+                <h1 class="title2">
+                    Choose the shoes most similar to the seen one
+                </h1>
+                <h1 class="title2"> DON'T PUSH THE BUTTON "GO BACK" IN YOUR BROWSER!!!</h1>
+                <div class="container" style="width:970px">
+                    {% for image_items in imgs %}
+                        <div class="fake_img">
+                            {% for image_item in image_items %}
+                                <form action="" method="get"> {% csrf_token %}
+                                <button type="submit" value="{{ image_item.id }}" name="NEXT" class="btn-orange">
+                                    <img src="{{ image_item.image.url }}" class="img-responsive">
+                                </button>
+                                </form>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+
+
+                </div>
+
+                <div style="margin:20px 0">
+
+                    {%  if skip %}
+                        <form action="" method="get" class="text-center"> {% csrf_token %}
+                            <button type="submit" value="SKIP" name="NEXT" class="btn btn-primary btn-orange">
+                                Nothing matches!
+                            </button>
+                        </form>
+
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+
+{% endblock %}
+
+</body>

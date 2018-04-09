@@ -1,0 +1,55 @@
+{% load static %}
+
+<!-- Custom styles -->
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!-- Bootstrap-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400" rel="stylesheet">
+    <!-- Custom styles -->
+     <link rel="stylesheet" href="{% static 'style2.css' %}">
+
+    <style>
+    </style>
+
+
+</head>
+
+<body class="general-container1 ">
+
+{% block content %}
+    <div>
+        <div class="row">
+            <h1 class="title">Change the mind?</h1>
+
+            <p class="title1">
+                Is the chosen shoe a good match?
+            </p>
+            <div class="col-md-5"></div>
+            <div class="col-md-3">
+                {% for image in images%}
+                    <img src="{{ image.url }}">
+                {% endfor %}
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+        <div style="margin:121px">
+            <form action="" method="get" class="text-center"> {% csrf_token %}
+                <button type="submit" value="yes!" name='BUY' class="btn btn-primary btn-orange">
+                   Yes!
+                </button>
+                <button type="submit" value="no!" name='BUY' class="btn btn-primary btn-orange">
+                   No!
+                </button>
+            </form>
+        </div>
+
+    </div>
+
+
+
+{% endblock %}
+
+</body>
