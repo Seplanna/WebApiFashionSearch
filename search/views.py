@@ -371,7 +371,7 @@ def ChoseTheBestPicture(request, game_id):
 
 def landing(request, game_id):
     print("START")
-    method_id = 1
+    method_id = random.randint(0,4)
 
     url = "/search/"
 

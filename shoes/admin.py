@@ -15,14 +15,6 @@ class ShoeAdmin(admin.ModelAdmin):
 
 admin.site.register(Shoe, ShoeAdmin)
 
-class ComfortAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Comfort._meta.fields]
-
-    class Meta:
-        model = Comfort
-
-admin.site.register(Comfort, ComfortAdmin)
-
 class ShoeDescriptionByAssessorAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ShoeDescriptionByAssessor._meta.fields]
     class Meta:

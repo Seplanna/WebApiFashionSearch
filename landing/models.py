@@ -47,7 +47,7 @@ class AssessorProfile(models.Model):
         ("9", "Hospitality, Tourism, and the Service Industry"),
         ("10", "Law and Law Enforcement"),
         ("11", "other"))
-    carrer_feild = models.CharField(max_length=2, choices=carrer_feild_choices, default="1")
+    carrer_feild = models.CharField(max_length=2, choices=carrer_feild_choices)
 
     online_shop_expirience_choises = (
         ("0", "I am mostly shopping online(make purchases every month)"),
@@ -55,8 +55,7 @@ class AssessorProfile(models.Model):
         ("2", "Have never done it"))
 
     expirience_in_online_shopping = models.CharField(max_length=40,
-                                              choices=online_shop_expirience_choises,
-                                                     default="0")
+                                              choices=online_shop_expirience_choises)
 
     def __str__(self):
         return str(self.id)

@@ -141,7 +141,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "static", "media")
 
 #uncomment
-try:
-    from .settings_prod import *
-except:
-    pass
+#try:
+#    from .settings_prod import *
+#except:
+#    pass
