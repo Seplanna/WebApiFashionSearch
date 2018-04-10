@@ -90,6 +90,13 @@ html, body
     padding: 10px 0 10px 0;
 }
 
+.title3 {
+  color:brown;
+  font-size: 15px;
+    position: relative;
+    text-align: center;
+    padding: 0px 0 0px 0;
+}
 
 
 .product-image-item{
@@ -140,8 +147,17 @@ html, body
 
 .button_choose_shoe {
     width:136px;
+    height: 30px;
 }
 
+.button_dont_know {
+    width:190px;
+    height: 30px;
+}
+
+.btn-margin{
+    margin: 30px;
+}
 
 .img-centre {
     position: absolute;

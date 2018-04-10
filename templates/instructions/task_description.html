@@ -25,24 +25,26 @@
 
                 <div class=fake_img">
                         <p class="title1">
-                            Thank you for participate in this user study.
-                            In this study we measure the quality of the search engine shoe fashion system,
-                            when the user has a concept in mind.
-                            In order to help us you will proceed several steps.
+                            Thank you for participating in this study.
+                            In this study, we measure the quality of the search system for shoes,
+                            when the user has a concept in mind. You will have 5 search sessions,
+                            in which you will look for shoes that are similar to the shown one.
+                            To help us, you will proceed a few steps.
                         </p>
                         <div class=fake_img">
                             <div class="general-container2">
                                 <h1 class="title">Step 1: Introduction</h1>
                                 <p class="title1">
-                                To avoid bias in our results we first ask you to provide some information about yourself.
+                                To avoid bias in our results we first ask you to provide
+                                    some information about yourself.
                                 </p>
                             </div>
 
                             <div class="general-container2">
                                 <h1 class="title">Step 2: The situation</h1>
                                 <p class="title1">
-                                In the second step we describe you the hypothetical situation in which this
-                                    system can be used.
+                                In the second step, we describe you the hypothetical situation
+                                    in which this system can be used.
                                 </p>
                             </div>
 
@@ -51,8 +53,8 @@
                             <div class="general-container2">
                                 <h1 class="title">Step 3: Describe and remember</h1>
                                 <p class="title1">
-                                We show you the shoe. In the next steps you will try to find a similar shoe.
-                                    You are asked to describe and to remember it.
+                                We show you the shoe. You are asked to describe and to remember it.
+                                    In the next steps, you will try to find a similar shoe.
                                 </p>
                             </div>
 
@@ -61,7 +63,7 @@
                             <div class="general-container2">
                                 <h1 class="title">Step 4: Find the match</h1>
                                 <p class="title1">
-                                    We continiously show you different shoes.
+                                    We continuously show you different shoes.
                                     Please choose ones that match by color or shape, individual or by column.
                                     Press the "Buy" button if you find the one. You can always give up.
 
@@ -89,7 +91,8 @@
                             <div class="general-container2">
                                 <h1 class="title">Step 5: Describe the difference</h1>
                                 <p class="title1">
-                                In the last step you will describe the difference between the best match and the desiered shoe.
+                                    In the last step, you will describe the difference between
+                                    the best match and the desired shoe.
                                 </p>
                             </div>
                         </div>
@@ -98,7 +101,7 @@
 
 
                     <div>
-                        <form action="/landing/" method="get" class="text-center">  {% csrf_token %}
+                        <form action="/landing/{{ form_id }}/" method="get" class="text-center">  {% csrf_token %}
                             <button type="submit", class="btn btn-primary btn-orange btn-large">
                                 I understand this!
                             </button>

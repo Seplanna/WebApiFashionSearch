@@ -18,6 +18,6 @@ from django.contrib import admin
 from instructions import views
 
 urlpatterns = [
-    url(r'^instruction/$', views.instruction, name='instructions'),
+    url(r'^instruction/(?P<form_id>\w+)/$', views.instruction, name='instructions'),
     # url(r'^', views.instruction, name='instructions'),
 ]

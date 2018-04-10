@@ -6,5 +6,10 @@ class AssessorProfileForm(forms.ModelForm):
 
     class Meta:
         model = AssessorProfile
-        exclude = [""]
+        exclude = ["login"]
 
+
+class  LoginForm(forms.ModelForm):
+    class Meta:
+        model =  Login
+        exclude = [""]

@@ -1,14 +1,6 @@
 from django.contrib import admin
 from .models import *
 
-class GenderAdmin (admin.ModelAdmin):
-    list_display = [field.name for field in Gender._meta.fields]
-    class Meta:
-        model = Gender
-
-admin.site.register(Gender, GenderAdmin)
-
-
 class AssessorProfileAdmin (admin.ModelAdmin):
     # list_display = ["name", "email"]
     list_display = [field.name for field in AssessorProfile._meta.fields]
@@ -17,22 +9,10 @@ class AssessorProfileAdmin (admin.ModelAdmin):
 
 admin.site.register(AssessorProfile, AssessorProfileAdmin)
 
-"""class SubscriberAdmin (admin.ModelAdmin):
-    # list_display = ["name", "email"]
-    list_display = [field.name for field in Subscriber._meta.fields]
-    list_filter = ['name',]
-    search_fields = ['name', 'email']
-
-    fields = ["email"]
-
-    # exclude = ["email"]
-	# inlines = [FieldMappingInline]
-	# fields = []
-    # #exclude = ["type"]
-	# #list_filter = ('report_data',)
-	# search_fields = ['category', 'subCategory', 'suggestKeyword']
-
+class  LoginFormAdmin (admin.ModelAdmin):
+    #list_display = ["user_name", "password"]
+    list_display = [field.name for field in  Login._meta.fields]
     class Meta:
-        model = Subscriber
+        model =  Login
 
-admin.site.register(Subscriber, SubscriberAdmin)"""
+admin.site.register( Login,  LoginFormAdmin)

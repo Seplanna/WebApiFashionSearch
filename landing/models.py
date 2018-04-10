@@ -1,23 +1,15 @@
 from django.db import models
 
 
-#class Subscriber(models.Model):
-#    email = models.EmailField()
-#    name = models.CharField(max_length=128)
-#
-#    def __str__(self):
-#        return "User %s %s" % (self.name, self.email,)
-#
-#    class Meta:
-#        verbose_name = 'MySubscriber'
-#        verbose_name_plural = 'A lot of Subscribers'
-
-class Gender(models.Model):
-    gender = models.CharField(max_length=20, blank=True, null=True, default=None)
+class Login(models.Model):
+    user_name = models.CharField(max_length=64)
+    password = models.CharField(max_length=64)
     def __str__(self):
-        return "%s" % self.gender
+        return str(self.id)
 
 class AssessorProfile(models.Model):
+
+    login = models.IntegerField(default=0)
 
     gender_choises=(
         ("W", "woman"),

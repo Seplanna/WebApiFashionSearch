@@ -28,7 +28,13 @@
         <div class="general-container1">
             <div class="row">
                 <div class="container">
-                    <h1 class="title">Thank you!</h1>
+                    <h1 class="title2">Thank you!</h1>
+                    <h1 class="title2">You finished {{ n_search_sessions }} search sessions.</h1>
+                    {% if finished_5 %}
+                        <h1 class="title2">You finished the last search session that we need.</br>
+                        But if we will be approciate if you will do some more. </h1>
+                    {% endif %}
+
                     <div class="fake_img">
                             <form action="/shoes/{{new_shoes_id}}/{{user_id}}" method="get" class="text-center"> {% csrf_token %}
                             <div>

@@ -32,8 +32,8 @@
 
         <div >
             <div class="row">
-                <h1 class="title2">{{ title }}</h1>
-                <h1 class="title2"> DON'T PUSH THE BUTTON "GO BACK" IN YOUR BROWSER!!!</h1>
+                <h1 class="title3">{{ title }}</h1>
+                <h1 class="title3"> DON'T PUSH THE BUTTON "GO BACK" IN YOUR BROWSER!!!</h1>
                 <div class="container" style="width:970px">
 
                     {% for line in imgs %}
@@ -57,15 +57,7 @@
                             </form>
                         </div>
                     {% endfor %}
-                    <div class="fake_img_no_border">
-                        <form action="" method="get" class="text-center"> {% csrf_token %}
-                            <div>
-                                <button type="submit" value="SKIP" name="NEXT" class="btn btn-primary btn-orange">
-                                Don't know which column
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+
                 </div>
 
 
@@ -76,19 +68,30 @@
 
                         <form action="" method="get" class="text-center"> {% csrf_token %}
                              <div>
-                                <button type="submit" value="1" name="BUY" class="btn btn-primary btn-orange btn-large">
+                                <button type="submit" value="1" name="BUY" class="btn btn-primary btn-orange button_choose_shoe">
                                     Buy something!
                                 </button>
                              </div>
 
                         </form>
                     </div>
+
+                     <div class="fake_img_no_border">
+                        <form action="" method="get" class="text-center"> {% csrf_token %}
+                            <div>
+                                <button type="submit" value="SKIP" name="NEXT" class="btn btn-primary btn-orange button_dont_know">
+                                Don't know which column
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
                     <div class="fake_img_no_border">
 
                         <form action="" method="get" class="text-center"> {% csrf_token %}
                             <div>
                              <div>
-                                <button type="submit" value="1" name="FINISH" class="btn btn-primary btn-orange btn-large">
+                                <button type="submit" value="1" name="FINISH" class="btn btn-primary btn-orange button_choose_shoe">
                                     I give up!
                                 </button>
                              </div>

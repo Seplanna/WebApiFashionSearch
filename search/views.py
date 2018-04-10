@@ -260,6 +260,8 @@ def SearchSessionEnd(request, game_id):
     new_shoes_id = random.choice(ids)
     user_id = game.user_id
     print("new_user_id = ", user_id, "new_shoes_id = ", new_shoes_id)
+    n_search_sessions = len(Game.objects.filter(user_id=game.user_id))
+    finished_5 = n_search_sessions%5==0
     return render(request, 'search/end_session.html', locals())
 
 def Description(request, game_id, product_id):
@@ -388,9 +390,13 @@ def landing(request, game_id):
 
 
     if answer.status == "color":
-        title = "Choose closest column by " + answer.status
+
+        title = "If the columns do not differ by " + answer.status + """ push the button "Don't know which column"."""\
+                + " Otherwise, choose the closest column by " + answer.status + "."
     else:
-        title = "(same images!) Choose closest column by " + answer.status
+        title = "(same images!) " + "If the columns do not differ by " + answer.status + \
+        """ push the button "Don't know which column"."""\
+                + " Otherwise, choose the closest column by " + answer.status + "."
 
     imgs = []
     for i in range(n_bins):
