@@ -1,0 +1,49 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!-- Bootstrap-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400" rel="stylesheet">
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="{% static 'style2.css' %}">
+
+    <style>
+    </style>
+
+
+</head>
+<body class="general-container1">
+
+    <div>
+
+        {% block content %}
+            <h1 class="title"> {{ title }}</h1>
+            <h1 class="title">Login please or create account</h1>
+            <div>
+                <form action="/create_account/" method="get" class="text-center"> {% csrf_token %}
+                    <button type="submit" class="btn btn-primary btn-orange btn-margin">
+                       I am a new user!
+                    </button>
+                </form>
+            </div>
+            <form method="post" class="text-center">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary btn-orange">Login</button>
+            </form>
+
+        {% endblock %}
+
+    </div>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+</body>
+</html>
