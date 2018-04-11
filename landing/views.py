@@ -34,6 +34,8 @@ def login(request, signal):
         new_form = form.save(commit=False)
         profiles = Login.objects.filter(user_name = new_form.user_name, password = new_form.password)
         if (len(profiles) > 0):
+            if not AssessorProfile.objects.filter(login=profiles[0].id).exists():
+                return HttpResponseRedirect("/instruction/" + str(new_form.id) + "/")
             user = AssessorProfile.objects.get(login=profiles[0].id)
             return HttpResponseRedirect("/task_description/" + str(user.id) + "/")
         else:
