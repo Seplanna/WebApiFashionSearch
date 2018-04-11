@@ -18,6 +18,7 @@ from django.contrib import admin
 from . import views
 
 urlpatterns = [
-    url(r'^final_stage/(?P<game_id>\w+)/(?P<product_id>\w+)/$', views.Description, name='Description')
+    url(r'^final_stage/(?P<game_id>\w+)/(?P<product_id>\w+)/$', views.Description, name='Description'),
+    url(r'^statistics/$', views.Statistics, name='Statistics'),
 
 ]
