@@ -14,11 +14,17 @@ def landing(request, form_id):
         return HttpResponseRedirect("/task_description/" + str(new_form.id) + "/")
     return render(request, 'landing/create_account.html', locals())
 
-def CreateAccount(request):
+def CreateAccount(request, signal):
+    if (signal == "0"):
+        title = ""
+    if (signal == "1"):
+        title = "Sorry this user name already exists. Try again."
     form = LoginForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
         print(form.cleaned_data)
         new_form = form.save(commit=False)
+        if Login.objects.filter(user_name = new_form.user_name).exists():
+            return HttpResponseRedirect("/create_account/1/")
         form.save()
         return HttpResponseRedirect("/instruction/" + str(new_form.id) + "/")
     return render(request, 'landing/create_account.html', locals())

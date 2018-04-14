@@ -22,6 +22,7 @@
     <div>
 
         {% block content %}
+            <h1 class="title3">{{ title }}</h1>
             <h1 class="title">Create account</h1>
             <form method="post" class="text-center">
                 {% csrf_token %}

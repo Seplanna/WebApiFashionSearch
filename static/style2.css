@@ -42,6 +42,14 @@ html, body
     margin-bottom: 20px;
 }
 
+.general-container3
+{
+    background: linear-gradient( rgba(250, 250, 250, 0.7), rgba(250, 250, 250, 0.7) );
+    background-color:white;
+    height: 5%;
+    font-weight: 200;
+}
+
 .general-container form label
 {
     color: black;
@@ -99,6 +107,21 @@ html, body
 }
 
 
+.title4 {
+  color:brown;
+  font-size: 15px;
+    position: relative;
+}
+
+.title5 {
+  color:brown;
+  font-size: 15px;
+    position: relative;
+    top:-15px;
+    text-align: center;
+    padding: 0px 0 0px 0;
+}
+
 .product-image-item{
     padding: 5px;
     margin-bottom: 5px;
@@ -112,9 +135,13 @@ html, body
     text-align:center;
 }
 
+.container1{
+    margin-left: 10px;
+}
+
 .fake_img{
     display:inline-block;
-    margin:5px 10px;
+    margin: 5px 10px;
     padding:5px;
 
     border:1px solid #CCC;
@@ -124,6 +151,12 @@ html, body
     display:inline-block;
     margin:5px 10px;
     padding:5px;
+}
+
+.fake_img_no_border1{
+    display:inline-block;
+    margin:0px 18px;
+    padding:0px;
 }
 
 .outer {
@@ -147,7 +180,33 @@ html, body
 
 .button_choose_shoe {
     width:136px;
-    height: 30px;
+    height: 25px;
+}
+
+.button_top_left {
+    position: relative;
+    left: -10%;
+
+}
+
+.button_top_right {
+    position: relative;
+    right: -10%;
+
+}
+
+.btn-top
+{
+    background-color:mistyrose;
+    top: -18px;
+    width:272px;
+    height: 90%;
+    font-size: 20px;
+    font-weight: 600;
+}
+.btn-top:hover
+{
+    background-color:plum;
 }
 
 .button_dont_know {
@@ -159,6 +218,13 @@ html, body
     margin: 30px;
 }
 
+.btn-small{
+    height: 22px;
+    font-size:12px;
+    font-weight: 500;
+}
+
+
 .img-centre {
     position: absolute;
     top: 119px;
@@ -166,3 +232,5 @@ html, body
     margin-left: -68px;
     margin-top: 0px;
 }
+
+

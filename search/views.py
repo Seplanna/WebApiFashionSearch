@@ -1,5 +1,6 @@
 from django.shortcuts import render, HttpResponseRedirect
-from .forms import ImagesInOneLine, OneImage, Game, Answer, ShoeDescriptionByAssessorForm, Shoe, ShoeDescriptionByAssessor
+from .forms import ImagesInOneLine, OneImage, Game, Answer, ShoeDescriptionByAssessorForm, \
+    Shoe, ShoeDescriptionByAssessor, AnswerForm
 import os
 import numpy as np
 import random
@@ -181,7 +182,7 @@ def ChangeAnswer(answer, answer_, data, data_in_bins):
         answer.colour_answer = answer_
         answer.status = "shape"
         answer.save()
-        return HttpResponseRedirect("/search/" + str(game.id) + "/")
+        #return HttpResponseRedirect("/search/" + str(game.id) + "/")
     elif answer.status == "shape":
         answer.shape_answer = answer_
         answer.status = "best image"
@@ -281,12 +282,7 @@ def Description(request, game_id, product_id):
     images = [shoe.image, Shoe.objects.get(id=game.target_image_id).image]
 
     form["short_description"].initial = initial_description.short_description
-    form["style"].initial = initial_description.style
-    form["comfort"].initial = initial_description.comfort
-    form["colour"].initial = initial_description.colour
-    form["function"].initial = initial_description.function
-    form["material"].initial = initial_description.material
-    form["brand_name"].initial = initial_description.brand_name
+    form["will_you_buy_it_for_your_self"].initial = initial_description.will_you_buy_it_for_your_self
 
 
     print("form is valid = ", form.is_valid())
@@ -422,7 +418,7 @@ def landing(request, game_id):
         game.save()
         return HttpResponseRedirect("/finish/" + str(game.id) + "/")
 
-    if request.GET.get('NEXT') == "SKIP":
+    """if request.GET.get('NEXT') == "SKIP":
         return ChangeAnswer(answer, -1, data, data_in_bins)
 
     try:
@@ -433,8 +429,18 @@ def landing(request, game_id):
 
 
     except:
-        print(request.GET.get('NEXT'))
+        print(request.GET.get('NEXT'))"""
 
+    form = AnswerForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            final_score = form.cleaned_data['Answer_color']
+            answer.colour_answer = int(final_score)
+            answer.status = "shape"
+            answer.save()
+            final_score = form.cleaned_data['Answer_shape']
+            print (answer.status, answer.colour_answer)
+            return ChangeAnswer(answer, int(final_score), data, data_in_bins)
 
 
     return render(request, 'search/search.html', locals())

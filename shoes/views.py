@@ -13,7 +13,7 @@ def CreateCatolog(data_path, result_path):
             if os.path.splitext(f)[1].lower() in ('.jpg', '.jpeg'):
                 data += [os.path.join(root, f)]
     print(len(data))
-    data = random.sample(data, 50)
+    #data = random.sample(data, 50)
     for d in data:
         subprocess.call(['cp', d, result_path + os.path.basename(d)])
         Shoe.objects.create(image="target_products/" + os.path.basename(d))
@@ -22,7 +22,7 @@ def CreateCatolog(data_path, result_path):
 
 def product_description(request, shoes_id, user_id):
     title = "Step 3: Describe and remember"
-    #CreateCatolog("static/media/product/", "static/media/target_products/")
+
     saw_shoe_description = True
     shoe = Shoe.objects.get(id=shoes_id)
     images = [shoe.image]
@@ -38,7 +38,9 @@ def product_description(request, shoes_id, user_id):
     return render(request, 'products/description_the_picture.html', locals())
 
 def landing(request, user_id):
+    #CreateCatolog("static/media/target_products/", "static/media/target_products/")
     products = Shoe.objects.all()
     ids = [product.id for product in products]
     new_shoes_id = random.choice(ids)
+    #new_shoes_id = 26
     return render(request, 'products/task_description.html', locals())

@@ -19,7 +19,7 @@ from landing import views
 
 urlpatterns = [
     url(r'^landing/(?P<form_id>\w+)/$', views.landing, name='landing'),
-    url(r'^login/(?P<signal>\w+)/$$', views.login, name='login'),
-    url(r'^create_account/$', views.CreateAccount, name='login'),
+    url(r'^login/(?P<signal>\w+)/$', views.login, name='login'),
+    url(r'^create_account/(?P<signal>\w+)/$', views.CreateAccount, name='login'),
 
 ]
