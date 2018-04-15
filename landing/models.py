@@ -12,8 +12,8 @@ class AssessorProfile(models.Model):
     login = models.IntegerField(default=0)
 
     gender_choises=(
-        ("W", "woman"),
-        ("M", "man"),
+        ("W", "female"),
+        ("M", "male"),
         ("O", "prefer not to tell")
     )
     gender = models.CharField(max_length=1, choices=gender_choises)
@@ -39,14 +39,14 @@ class AssessorProfile(models.Model):
         ("9", "Hospitality, Tourism, and the Service Industry"),
         ("10", "Law and Law Enforcement"),
         ("11", "other"))
-    carrer_feild = models.CharField(max_length=2, choices=carrer_feild_choices)
+    career_field = models.CharField(max_length=2, choices=carrer_feild_choices)
 
     online_shop_expirience_choises = (
         ("0", "I am mostly shopping online(make purchases every month)"),
         ("1", "I do online shopping once or twice per year"),
         ("2", "Have never done it"))
 
-    expirience_in_online_shopping = models.CharField(max_length=40,
+    experience_in_online_shopping = models.CharField(max_length=40,
                                               choices=online_shop_expirience_choises)
 
     def __str__(self):
