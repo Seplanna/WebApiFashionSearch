@@ -33,12 +33,14 @@ def DevideFeatureIntoBinsFromData(values, n_bins):
     values = np.array(values)
     bins = values[arg_sort[0::step]]
     bins = bins[1:]
+    last_value = bins[0]
     return bins
 
 def ReturnImagesCLosedToMedian(features_in_bins, data_by_bins, n_bins, n_pictures_per_bin, median):
     features_in_bins = np.array(features_in_bins)
     closest_to_median_images = [[] for i in range(n_bins)]
     for bin in range(n_bins):
+        print("BIN = ", bin)
         feature_in_bin = features_in_bins[data_by_bins[bin]]
         feature_in_bin -= median
         norms = np.linalg.norm(feature_in_bin, axis=1)
@@ -66,12 +68,36 @@ def  Real1_one_feature_from_given_features(features, data_len, n_bins, n_picture
         features_in_bins.append(features_)
 
     bins = DevideFeatureIntoBinsFromData(feature_values, n_bins)
+    print("BINS VALUES = ", bins)
 
     data_by_bins = [[] for i in range(n_bins)]
 
     for d in range(len(feature_values)):
         bin = RecieveBinOfTheFeature(feature_values[d], bins, n_bins)
         data_by_bins[bin].append(d)
+#--------------------------For the situation when value of some bins is equal---------------------
+    first_bin = 0
+    last_bin = 0
+    while last_bin < len(data_by_bins):
+        if len(data_by_bins[last_bin]) > 0:
+            if (last_bin - first_bin == 0):
+                last_bin += 1
+                first_bin = last_bin
+            else:
+                n_splits = last_bin - first_bin + 1
+                elements = data_by_bins[last_bin]
+                random.shuffle(elements)
+                step = len(elements) / n_splits
+                for bin_ in range(last_bin - first_bin):
+                    data_by_bins[first_bin + bin_] = elements[step * bin_: step * (bin_ + 1)]
+                data_by_bins[last_bin] = elements[step * (bin_ + 1):]
+                last_bin += 1
+                first_bin = last_bin
+        else:
+            last_bin += 1
+# --------------------------For the situation when value of some bins is equal---------------------
+
+
     print("POINT =", point)
     if point < 0:
         median = GetMedian(features_in_bins)
@@ -447,7 +473,8 @@ def landing(request, game_id):
 
 
 def SearchSessionStart(request, user_id, product_id):
-    #CreateCatolog(n_bins, "static/media/product/")
+    if not ImagesInOneLine.objects.exists():
+        CreateCatolog(n_bins, "static/media/product/")
     method_id = random.randint(0, n_methods-1)
     CreateGame(user_id, product_id, method_id)
     game = Game.objects.filter(user_id=user_id, target_image_id=product_id, method_id=method_id)[0]
