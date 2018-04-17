@@ -20,6 +20,6 @@ from shoes import views
 urlpatterns = [
     #url(r'^shoes/$', views.landing, name='shoes'),
     url(r'^task_description/(?P<user_id>\w+)/$', views.landing, name='shoes'),
-    url(r'^shoes/(?P<shoes_id>\w+)/(?P<user_id>\w+)/$', views.product_description, name='product_description'),
+    url(r'^shoes/(?P<task_id>\w+)/(?P<user_id>\w+)/$', views.product_description, name='product_description'),
 
 ]

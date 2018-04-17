@@ -11,9 +11,9 @@ def Copy_logins_and_Profiles(path_login, path_user_profile):
                              str(login.password) + "\n")
             if (AssessorProfile.objects.filter(login=login.id).exists()):
                 a_p = AssessorProfile.objects.get(login=login.id)
-                user_file.write(str(a_p.id) + "\t" + str(a_p.login) + "\t" + str(a_p.carrer_feild) +
+                user_file.write(str(a_p.id) + "\t" + str(a_p.login) + "\t" + str(a_p.career_field) +
                                 "\t" + str(a_p.gender) + "\t" + str(a_p.age) + "\t" +
-                                str(a_p.expirience_in_online_shopping) + "\n")
+                                str(a_p.experience_in_online_shopping) + "\n")
 
 def CreateProfilesFromCopy(path_login, path_user_profile):
     logins = open(path_login).readlines()
@@ -35,7 +35,7 @@ def CreateProfilesFromCopy(path_login, path_user_profile):
                                        expirience_in_online_shopping=profile[3])
 
 def Statistics(request):
-    #Copy_logins_and_Profiles("static/text_files/logins.txt", "static/text_files/user_profile.txt")
+    Copy_logins_and_Profiles("static/text_files/logins.txt", "static/text_files/user_profile.txt")
     #CreateProfilesFromCopy("static/text_files/logins.txt", "static/text_files/user_profile.txt")
     games = Game.objects.all()
     games_sucsess = [game for game in games if game.sucsess==1]
@@ -64,7 +64,7 @@ def Description(request, game_id):
 
     print("SHOE = ", shoe, game.user_id, game.target_image_id)
 
-    initial_description = ShoeDescriptionByAssessor.objects.get(user_profile=game.user_id,
-                                                                image_id=game.target_image_id)
+    initial_description = ShoeDescriptionByAssessor.objects.filter(user_profile=game.user_id,
+                                                                image_id=game.target_image_id)[0]
     images = [shoe.image, Shoe.objects.get(id=game.target_image_id).image]
     return render(request, 'final_stage/description_diff.html', locals())

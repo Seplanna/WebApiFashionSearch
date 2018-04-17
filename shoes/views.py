@@ -1,46 +1,74 @@
 from django.shortcuts import render, HttpResponseRedirect
 from .forms import Shoe
-from .forms import ShoeDescriptionByAssessorForm
+from .forms import ShoeDescriptionByAssessorForm, OneTask,ShoeDescriptionByAssessor
 import os
 import random
 import subprocess
 #from products.models import *
 
-def CreateCatolog(data_path, result_path):
+def ChooseTask(user_id):
+    n_images = 5
+
+    if (OneTask.objects.filter(user_id=user_id).exists()):
+        tasks = OneTask.objects.filter(user_id=user_id)
+        print(len(tasks), [task.id for task in tasks])
+        tasks_not_finished = [task for task in tasks if task.iteration < n_images]
+        if len(tasks_not_finished) > 0:
+            return tasks_not_finished[0]
+
+    used_tasks = [task_number.task_number for task_number in OneTask.objects.all() if
+                  task_number.iteration == n_images]
+    all_tasks = open("static/text_files/tasks.txt").readlines()[:-1]
+    free_tasks = [i for i in range(len(all_tasks)) if i not in used_tasks]
+    task_number = random.choice(free_tasks)
+    task = all_tasks[task_number].strip().split("\t")
+    images = "\t".join(task[:n_images])
+    methods = "\t".join(task[n_images:])
+    return OneTask.objects.create(images=images, methods=methods, task_number=task_number, user_id=user_id)
+
+def TakeImageIdFromTask(task):
+    image = task.images.split("\t")[task.iteration]
+    product = Shoe.objects.get(image=("target_products/" + image))
+    return product.id
+
+def CreateCatolog(data_path):
     data = []
     for root, subdirs, files in os.walk(data_path):
         for f in files:
             if os.path.splitext(f)[1].lower() in ('.jpg', '.jpeg'):
                 data += [os.path.join(root, f)]
     print(len(data))
-    #data = random.sample(data, 50)
     for d in data:
-        subprocess.call(['cp', d, result_path + os.path.basename(d)])
         Shoe.objects.create(image="target_products/" + os.path.basename(d))
 
-
-
-def product_description(request, shoes_id, user_id):
+def product_description(request, task_id, user_id):
     title = "Step 3: Describe and remember"
 
     saw_shoe_description = True
-    shoe = Shoe.objects.get(id=shoes_id)
+    task = OneTask.objects.get(id=task_id)
+    shoe_id = TakeImageIdFromTask(task)
+    shoe = Shoe.objects.get(id=shoe_id)
     images = [shoe.image]
-    form = ShoeDescriptionByAssessorForm(request.POST or None)
 
+    form = ShoeDescriptionByAssessorForm(request.POST or None)
+    if ShoeDescriptionByAssessor.objects.filter(user_profile=user_id, image_id=shoe_id).exists():
+        initial_description = ShoeDescriptionByAssessor.objects.filter(user_profile=user_id,
+                                                                       image_id=shoe_id)[0]
+        form["short_description"].initial = initial_description.short_description
+        form["will_you_buy_it_for_your_self"].initial = initial_description.will_you_buy_it_for_your_self
     if request.method == "POST" and form.is_valid():
         print(form.cleaned_data)
         new_form = form.save(commit=False)
-        new_form.image_id = shoes_id
+        new_form.image_id = shoe_id
         new_form.user_profile = user_id
         new_form.save()
-        return HttpResponseRedirect("/start_session/" + str(user_id) + "/" + str(shoes_id) + "/")
+        return HttpResponseRedirect("/start_session/" + str(user_id) + "/" + str(task_id) + "/")
     return render(request, 'products/description_the_picture.html', locals())
 
 def landing(request, user_id):
-    #CreateCatolog("static/media/target_products/", "static/media/target_products/")
-    products = Shoe.objects.all()
-    ids = [product.id for product in products]
-    new_shoes_id = random.choice(ids)
-    #new_shoes_id = 26
+    if not Shoe.objects.exists():
+        CreateCatolog("static/media/target_products/")
+    task = ChooseTask(user_id)
+    task_id = task.id
+
     return render(request, 'products/task_description.html', locals())

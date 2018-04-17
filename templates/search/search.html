@@ -32,34 +32,40 @@
         <div class="general-container3 text-center" style="width:1358px">
 
 
+            {% if buy_button %}
+                <div class="fake_img_no_border">
+
+                    <form action="" method="get" class="text-center"> {% csrf_token %}
+                         <div>
+                            <button type="submit" value="1" name="BUY" class="button_top_left btn-top">
+                                Buy something!
+                            </button>
+                         </div>
+
+                    </form>
+                </div>
+            {% endif %}
 
             <div class="fake_img_no_border">
-
-                <form action="" method="get" class="text-center"> {% csrf_token %}
-                     <div>
-                        <button type="submit" value="1" name="BUY" class="button_top_left btn-top">
-                            Buy something!
-                        </button>
-                     </div>
-
-                </form>
+                <h1 class="title5">DON'T PUSH THE BUTTON GO BACK IN YOUR BROWSER!
+                    Iteration number: {{ game.iteration }}</h1>
             </div>
-            <div class="fake_img_no_border">
-                <h1 class="title5">DON'T PUSH THE BUTTON GO BACK IN YOUR BROWSER!</h1>
-            </div>
-            <div class="fake_img_no_border">
 
-                <form action="" method="get" class="text-center"> {% csrf_token %}
-                    <div>
-                     <div>
-                        <button type="submit" value="1" name="FINISH" class="button_top_right btn-top">
-                            I give up!
-                        </button>
-                     </div>
-                    </div>
+            {% if buy_button %}
+                <div class="fake_img_no_border">
 
-                </form>
-            </div>
+                    <form action="" method="get" class="text-center"> {% csrf_token %}
+                        <div>
+                         <div>
+                            <button type="submit" value="1" name="FINISH" class="button_top_right btn-top">
+                                I give up!
+                            </button>
+                         </div>
+                        </div>
+
+                    </form>
+                </div>
+            {% endif %}
 
         </div>
 
@@ -81,7 +87,10 @@
                 <div class="container" style="width:1358px;">
                     <form action="" method="post" class="text-center"> {% csrf_token %}
                         <div style="border:1px solid #dddddd;">
-                            <div class="title4"> Choose column by color: </div>
+                            <div class="title4"> If the columns don't differ by color push the button
+                                "No difference".
+                                Otherwise, choose the closest column by color:
+                            </div>
                             {% for radio in form.Answer_color %}
                                 <div class="fake_img_no_border">
 
@@ -93,7 +102,10 @@
                             {% endfor %}
                         </div>
                         <div style="border:1px solid #dddddd;">
-                            <div class="title4"> Choose column by shape: </div>
+                            <div class="title4">
+                                If the columns don't differ by shape push the button "No difference".
+                                Otherwise, choose the closest column by shape:
+                            </div>
                             {% for radio in form.Answer_shape %}
                                 <div class="fake_img_no_border">
                                         <div class="btn btn-primary btn-orange button_choose_shoe">

@@ -51,3 +51,16 @@ class GameAdmin(admin.ModelAdmin):
         model = Game
 
 admin.site.register(Game, GameAdmin)
+
+class GameInLine(admin.TabularInline):
+    model=Game
+    extra=0
+
+class TaskAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in OneTask._meta.fields]
+    inlines = [GameInLine]
+
+    class Meta:
+        model = OneTask
+
+admin.site.register(OneTask, TaskAdmin)

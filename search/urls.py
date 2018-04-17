@@ -22,7 +22,7 @@ urlpatterns = [
     url(r'^best_picture/(?P<game_id>\w+)/$', views.ChoseTheBestPicture, name='ChoseTheBestPicture'),
     url(r'^finish/(?P<game_id>\w+)/$', views.Finish, name='Finish'),
     url(r'^will_you_buy/(?P<game_id>\w+)/(?P<product_id>\w+)/$', views.Will_you_buy, name='will_you_buy'),
-    url(r'^start_session/(?P<user_id>\w+)/(?P<product_id>\w+)/$', views.SearchSessionStart, name='SearchSessionStart'),
+    url(r'^start_session/(?P<user_id>\w+)/(?P<task_id>\w+)/$', views.SearchSessionStart, name='SearchSessionStart'),
     url(r'^description_best_image/(?P<game_id>\w+)/(?P<product_id>\w+)/$', views.Description, name='Description'),
     url(r'^search_session_end/(?P<game_id>\w+)/$', views.SearchSessionEnd, name='SearchSessionEnd')
 

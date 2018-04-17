@@ -36,7 +36,7 @@
                     {% endif %}
 
                     <div class="fake_img">
-                            <form action="/shoes/{{new_shoes_id}}/{{user_id}}" method="get" class="text-center"> {% csrf_token %}
+                            <form action="/shoes/{{task_id}}/{{user_id}}" method="get" class="text-center"> {% csrf_token %}
                             <div>
                                 <button type="submit" name="NEXT" class="btn btn-primary btn-orange btn-large btn-center">
                                 Start the search session with another pair of shoes!
