@@ -29,14 +29,14 @@ def CreateProfilesFromCopy(path_login, path_user_profile):
         if login[0] in profiles_dic:
             profile = profiles_dic[login[0]]
             print profile
-            AssessorProfile.objects.create(login=log.id, carrer_feild=profile[0],
+            AssessorProfile.objects.create(login=log.id, career_field=profile[0],
                                        gender=profile[1],
                                        age=profile[2],
-                                       expirience_in_online_shopping=profile[3])
+                                           experience_in_online_shopping=profile[3])
 
 def Statistics(request):
-    Copy_logins_and_Profiles("static/text_files/logins.txt", "static/text_files/user_profile.txt")
-    #CreateProfilesFromCopy("static/text_files/logins.txt", "static/text_files/user_profile.txt")
+    #Copy_logins_and_Profiles("static/text_files/logins.txt", "static/text_files/user_profile.txt")
+    CreateProfilesFromCopy("static/text_files/logins.txt", "static/text_files/user_profile.txt")
     games = Game.objects.all()
     games_sucsess = [game for game in games if game.sucsess==1]
     games_fall = [game for game in games if game.sucsess == -1]
