@@ -24,7 +24,8 @@ urlpatterns = [
     url(r'^will_you_buy/(?P<game_id>\w+)/(?P<product_id>\w+)/$', views.Will_you_buy, name='will_you_buy'),
     url(r'^start_session/(?P<user_id>\w+)/(?P<task_id>\w+)/$', views.SearchSessionStart, name='SearchSessionStart'),
     url(r'^description_best_image/(?P<game_id>\w+)/(?P<product_id>\w+)/$', views.Description, name='Description'),
-    url(r'^search_session_end/(?P<game_id>\w+)/$', views.SearchSessionEnd, name='SearchSessionEnd')
+    url(r'^search_session_end/(?P<game_id>\w+)/$', views.SearchSessionEnd, name='SearchSessionEnd'),
+    url(r'^end_the_game/(?P<game_id>\w+)/$', views.EndGame, name='EndGame')
 
 
 ]

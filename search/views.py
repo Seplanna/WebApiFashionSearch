@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponseRedirect
 from .forms import ImagesInOneLine, OneImage, Game, Answer, ShoeDescriptionByAssessorForm, \
-    Shoe, ShoeDescriptionByAssessor, AnswerForm, OneTask
+    Shoe, ShoeDescriptionByAssessor, AnswerForm, OneTask, FeedbackForm
 from shoes.views import TakeImageIdFromTask, ChooseTask
 import os
 import numpy as np
@@ -319,7 +319,19 @@ def SpamQuestionCreate(game_id):
 
 
 
-
+def EndGame(request, game_id):
+    game = Game.objects.get(id=game_id)
+    task = game.task
+    task_id = task.id
+    form = FeedbackForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            print(form.cleaned_data)
+            new_form = form.save(commit=False)
+            new_form.task_id = task_id
+            new_form.save()
+            return HttpResponseRedirect("/search_session_end/" + str(game.id) + "/")
+    return render(request, 'search/end_5_sessions.html', locals())
 
 def SearchSessionEnd(request, game_id):
     game = Game.objects.get(id=game_id)
@@ -363,6 +375,11 @@ def Description(request, game_id, product_id):
         new_form.image_id = product_id
         new_form.user_profile = game.user_id
         new_form.save()
+
+        n_search_sessions = len(Game.objects.filter(user_id=game.user_id))
+        finished_5 = n_search_sessions % 5 == 0
+        if (finished_5):
+            return HttpResponseRedirect("/end_the_game/"+ str(game.id) + "/")
         return HttpResponseRedirect("/search_session_end/" + str(game.id) + "/")
     #return render(request, 'search/description_best_picture.html', locals())
     return render(request, 'products/description_the_picture.html', locals())

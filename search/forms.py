@@ -26,3 +26,9 @@ class AnswerForm(forms.Form):
 
 
 
+class FeedbackForm(forms.ModelForm):
+
+    class Meta:
+        model = Feedback
+        exclude = ["task_id"]
+

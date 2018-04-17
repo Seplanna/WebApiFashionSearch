@@ -64,3 +64,9 @@ class TaskAdmin(admin.ModelAdmin):
         model = OneTask
 
 admin.site.register(OneTask, TaskAdmin)
+
+class FeedbackAdmin(admin.ModelAdmin):
+    model=Feedback
+    extra=0
+
+admin.site.register(Feedback, FeedbackAdmin)

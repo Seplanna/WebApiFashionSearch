@@ -47,4 +47,8 @@ class OneImage(models.Model):
         return "%s_%s" % (self.id,self.line_id.id)
 
 
-
+class Feedback(models.Model):
+    feedback = models.TextField()
+    task_id = models.IntegerField()
+    def __str__(self):
+        return "%s" % self.id
