@@ -21,7 +21,7 @@ def GetMedian(features_in_bins):
 
 def RecieveBinOfTheFeature(value, bins, n_bins):
     bin = 0
-    while (bin < n_bins - 1 and value > (bins[bin])):
+    while (bin < n_bins - 1 and value >= (bins[bin])):
         bin += 1
     if (bin == n_bins):
         bin -= 1
@@ -50,6 +50,7 @@ def ReturnImagesCLosedToMedian(features_in_bins, data_by_bins, n_bins, n_picture
         print(norms[argsort[0]], bin)
         if (n_pictures_per_bin < 0):
             n_pictures_per_bin_ = len(data_by_bins[bin])
+        print("ARGSORT ", bin, argsort.shape, len(data_by_bins[bin]))
         for i in range(n_pictures_per_bin_):
             closest_to_median_images[bin].append(data_by_bins[bin][argsort[i]])
     return closest_to_median_images
@@ -79,6 +80,7 @@ def  Real1_one_feature_from_given_features(features, data_len, n_bins, n_picture
 #--------------------------For the situation when value of some bins is equal---------------------
     first_bin = 0
     last_bin = 0
+    print("DATA_BY_BINS_LENGTH = ", [len(bin) for bin in data_by_bins])
     while last_bin < len(data_by_bins):
         if len(data_by_bins[last_bin]) > 0:
             if (last_bin - first_bin == 0):
@@ -541,6 +543,7 @@ def SearchSessionStart(request, user_id, task_id):
         CreateCatolog(n_bins, "static/media/product/")
     #method_id = random.randint(0, n_methods-1)
     task = OneTask.objects.get(id=task_id)
+    task.save()
     CreateGame(user_id, task)
     target_image_id = TakeImageIdFromTask(task)
     method_id = int(task.methods.strip().split("\t")[task.iteration])
