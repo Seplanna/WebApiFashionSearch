@@ -25,10 +25,16 @@
             <h1 class="title">Statistics!</h1>
 
             <p class="title1">
-               Sucsess : {{ n_games_sucsess }}
+                Sucsess:
+                {% for sucsess in games_sucsess%}
+                    {{ sucsess }},
+                {% endfor %}
             </p>
             <p class="title1">
-               Fall : {{ n_games_fall }}
+               Fall:
+                {% for unsucsess in games_fall%}
+                    {{ unsucsess }},
+                {% endfor %}
             </p>
 
     </div>

@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponseRedirect
-from .forms import OneImage, Game, Shoe, ShoeDescriptionByAssessor, Login, AssessorProfile
+from .forms import OneImage, Game, Shoe, ShoeDescriptionByAssessor, Login, AssessorProfile, OneTask
 import os
 import numpy as np
 #from products.models import *
@@ -36,12 +36,19 @@ def CreateProfilesFromCopy(path_login, path_user_profile):
 
 def Statistics(request):
     #Copy_logins_and_Profiles("static/text_files/logins.txt", "static/text_files/user_profile.txt")
+    n_methods = 6
     CreateProfilesFromCopy("static/text_files/logins.txt", "static/text_files/user_profile.txt")
-    games = Game.objects.all()
-    games_sucsess = [game for game in games if game.sucsess==1]
-    games_fall = [game for game in games if game.sucsess == -1]
-    n_games_sucsess = len(games_sucsess)
-    n_games_fall = len(games_fall)
+    tasks = OneTask.objects.all()
+    tasks = [task for task in tasks if task.iteration >= 5]
+    games_sucsess = [0. for i in range(n_methods)]
+    games_fall = [0. for i in range(n_methods)]
+    for i in tasks:
+        game = Game.objects.filter(task=i)
+        for g in game:
+            if g.sucsess == 1:
+                games_sucsess[g.method_id] += 1
+            if g.sucsess == -1:
+                games_fall[g.method_id] += 1
     return render(request, 'final_stage/statistics.html', locals())
 
 def FinalStage(request, game_id, product_id):
