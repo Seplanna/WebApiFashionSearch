@@ -7,7 +7,7 @@ import subprocess
 #from products.models import *
 
 def ChooseTask(user_id):
-    n_images = 5
+    n_images = 6
 
     if (OneTask.objects.filter(user_id=user_id).exists()):
         tasks = OneTask.objects.filter(user_id=user_id)
@@ -16,10 +16,13 @@ def ChooseTask(user_id):
         if len(tasks_not_finished) > 0:
             return tasks_not_finished[0]
 
+
     used_tasks = [task_number.task_number for task_number in OneTask.objects.all() if
                   task_number.iteration == n_images]
-    all_tasks = open("static/text_files/tasks.txt").readlines()[:-1]
+    all_tasks = open("static/text_files/tasks1.txt").readlines()[:-1]
     free_tasks = [i for i in range(len(all_tasks)) if i not in used_tasks]
+    if len(free_tasks) == 0:
+        free_tasks = [i for i in range(len(all_tasks))]
     task_number = random.choice(free_tasks)
     task = all_tasks[task_number].strip().split("\t")
     images = "\t".join(task[:n_images])
@@ -69,6 +72,9 @@ def landing(request, user_id):
     if not Shoe.objects.exists():
         CreateCatolog("static/media/target_products/")
     task = ChooseTask(user_id)
+    #task.images="8049001.3.jpg\t8049001.3.jpg\t8049001.3.jpg\t8049001.3.jpg\t8049001.3.jpg"
+    #task.methods = "5\t5\t5\t5\t5"
+    #task.save()
     task_id = task.id
 
     return render(request, 'products/task_description.html', locals())

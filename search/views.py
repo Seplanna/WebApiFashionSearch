@@ -9,7 +9,7 @@ import random
 n_bins = 5
 n_pictures_per_bin = 5
 n_features = 5
-n_methods = 5
+n_methods = 6
 #from products.models import *
 
 #----------------------delete-----------------------------------------------
@@ -34,6 +34,7 @@ def DevideFeatureIntoBinsFromData(values, n_bins):
     values = np.array(values)
     bins = values[arg_sort[0::step]]
     bins = bins[1:]
+    bins -= 1e-10
     last_value = bins[0]
     return bins
 
@@ -41,7 +42,7 @@ def ReturnImagesCLosedToMedian(features_in_bins, data_by_bins, n_bins, n_picture
     features_in_bins = np.array(features_in_bins)
     closest_to_median_images = [[] for i in range(n_bins)]
     for bin in range(n_bins):
-        print("BIN = ", bin)
+        print("BIN = ", bin, len(data_by_bins[bin]))
         feature_in_bin = features_in_bins[data_by_bins[bin]]
         feature_in_bin -= median
         norms = np.linalg.norm(feature_in_bin, axis=1)
@@ -98,6 +99,7 @@ def  Real1_one_feature_from_given_features(features, data_len, n_bins, n_picture
                 first_bin = last_bin
         else:
             last_bin += 1
+    print("DATA_BY_BINS_LENGTH1 = ", [len(bin) for bin in data_by_bins])
 # --------------------------For the situation when value of some bins is equal---------------------
 
 
@@ -128,7 +130,7 @@ def CreateCatolog(n_bins, data_path):
         OneImage.objects.create(image=d_)"""
 #-----------------------------------------------------------------------------
 def GetFeturesFromText(text):
-    data = text.split("\n")[:-1]
+    data = text.strip().split("\n")
     features = []
     for d in data:
         d1 = d.split("_")[:-1]
@@ -180,6 +182,7 @@ def TakeDatasetFromMethodNumber(number):
                2: "static/text_files/InfoGAN.csv",
                3: "static/text_files/PCA_AutoEncoder.csv",
                4: "static/text_files/PCA_GIST.csv",
+               5: "static/text_files/spam.txt",
                }
     return mehtods[number]
 
@@ -238,6 +241,7 @@ def ChangeAnswer(answer, answer_, data, data_in_bins):
         game.save()
         line = max(answer.colour_answer, answer.shape_answer)
         data = [data[i] for i in data_in_bins[line]]
+        print("DATA LEN = ", len(data))
         game.data = "\n".join(data)
         game.save()
         return HttpResponseRedirect("/search/" + str(game.id) + "/")
@@ -265,7 +269,7 @@ def Get_data_data_in_bins_answer(game_id, n_bins, n_pictures_per_bin, n_features
     answer = Answer.objects.filter(game_id=game, iteration=game.iteration)[0]
 
     features,data = GetFeturesFromText(game.data)
-    print(features.shape)
+    print("SHAPE = ", features.shape)
 
     images_in_bins, data_in_bins = \
         Real1_one_feature_from_given_features(features,
@@ -296,6 +300,7 @@ def FinishIfNotEnoughImages(game_id, n_bins, n_pictures_per_bin):
 def SpamQuestionCreate(game_id):
     game = Game.objects.get(id=game_id)
     task = game.task
+    #task = OneTask.objects.get(id=4)
     images = task.images.strip().split("\t")
 
     spams = [line for line in open("static/text_files/spam.txt").readlines() if
@@ -311,8 +316,8 @@ def SpamQuestionCreate(game_id):
         for spam in spams:
             if spam.strip().split("\t")[-1] == image:
                 print("SPAM DETECTOR = ", image, spam)
-                spam = spam.strip().split("\t")[n_pictures_per_bin*(game.iteration / 5):
-                n_pictures_per_bin * (game.iteration / 5 + 1)]
+                spam = spam.strip().split("\t")[n_pictures_per_bin*(game.iteration / n_methods):
+                n_pictures_per_bin * (game.iteration / n_methods + 1)]
                 for im in spam:
                     imgs[ind].image = "/product/" + im
                     imgs[ind].save()
@@ -336,6 +341,7 @@ def EndGame(request, game_id):
     return render(request, 'search/end_5_sessions.html', locals())
 
 def SearchSessionEnd(request, game_id):
+    n_games = n_methods
     game = Game.objects.get(id=game_id)
     task = game.task
     task.iteration += 1
@@ -344,7 +350,7 @@ def SearchSessionEnd(request, game_id):
     user_id = game.user_id
     n_search_sessions = len(Game.objects.filter(user_id=game.user_id))
     task_id = task.id
-    finished_5 = n_search_sessions%5==0
+    finished_5 = n_search_sessions%n_games==0
     if (finished_5):
         task = ChooseTask(game.user_id)
         task_id = task.id
@@ -379,7 +385,7 @@ def Description(request, game_id, product_id):
         new_form.save()
 
         n_search_sessions = len(Game.objects.filter(user_id=game.user_id))
-        finished_5 = n_search_sessions % 5 == 0
+        finished_5 = n_search_sessions % n_methods == 0
         if (finished_5):
             return HttpResponseRedirect("/end_the_game/"+ str(game.id) + "/")
         return HttpResponseRedirect("/search_session_end/" + str(game.id) + "/")
@@ -463,10 +469,11 @@ def landing(request, game_id):
     buy_button = True
 
     game = Game.objects.filter(id=game_id)[0]
+    task = game.task
     if FinishIfNotEnoughImages(game_id, n_bins, n_pictures_per_bin):
         return HttpResponseRedirect("/finish/" + str(game.id) + "/")
 
-    if game.iteration%5==0 and game.iteration / 5 < 3:
+    """if game.iteration%5==0 and game.iteration / 5 < 3:
     #--------------------------spam_detector-------------------------------------------
         buy_button = False
         if not Answer.objects.filter(game_id=game, iteration=game.iteration).exists():
@@ -494,45 +501,45 @@ def landing(request, game_id):
                 return HttpResponseRedirect("/search/" + str(game.id) + "/")
     # --------------------------spam_detector-------------------------------------------
 
-    else:
-        data, data_in_bins, answer, lines, images_in_bins = \
-            Get_data_data_in_bins_answer(game.id, n_bins, n_pictures_per_bin, n_features)
+    else:"""
+    data, data_in_bins, answer, lines, images_in_bins = \
+        Get_data_data_in_bins_answer(game.id, n_bins, n_pictures_per_bin, n_features)
 
 
-        imgs = []
-        for i in range(n_bins):
-            line = ImagesInOneLine.objects.get(line_number=i)
-            imgs.append(OneImage.objects.filter(game_id=game, line_id=line))
+    imgs = []
+    for i in range(n_bins):
+        line = ImagesInOneLine.objects.get(line_number=i)
+        imgs.append(OneImage.objects.filter(game_id=game, line_id=line))
 
-        values = range(n_bins)
-        session_key = request.session.session_key
-        if not session_key:
-            request.session.cycle_key()
+    values = range(n_bins)
+    session_key = request.session.session_key
+    if not session_key:
+        request.session.cycle_key()
 
-        if request.GET.get('BUY') == '1' or request.GET.get('FINISH') == '1':
-            game = Game.objects.filter(id=game_id)[0]
-            game.sucsess = -1
-            if (request.GET.get('BUY') == '1'):
-                game.sucsess = 1
+    if request.GET.get('BUY') == '1' or request.GET.get('FINISH') == '1':
+        game = Game.objects.filter(id=game_id)[0]
+        game.sucsess = -1
+        if (request.GET.get('BUY') == '1'):
+            game.sucsess = 1
 
-            data1 = ""
-            for bin in images_in_bins:
-                for im in bin:
-                    data1 += data[im] + "\n"
-            game.data = data1
-            game.save()
-            return HttpResponseRedirect("/finish/" + str(game.id) + "/")
+        data1 = ""
+        for bin in images_in_bins:
+            for im in bin:
+                data1 += data[im] + "\n"
+        game.data = data1
+        game.save()
+        return HttpResponseRedirect("/finish/" + str(game.id) + "/")
 
-        form = AnswerForm(request.POST or None)
-        if request.method == 'POST':
-            if form.is_valid():
-                final_score = form.cleaned_data['Answer_color']
-                answer.colour_answer = int(final_score)
-                answer.status = "shape"
-                answer.save()
-                final_score = form.cleaned_data['Answer_shape']
-                print (answer.status, answer.colour_answer)
-                return ChangeAnswer(answer, int(final_score), data, data_in_bins)
+    form = AnswerForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            final_score = form.cleaned_data['Answer_color']
+            answer.colour_answer = int(final_score)
+            answer.status = "shape"
+            answer.save()
+            final_score = form.cleaned_data['Answer_shape']
+            print (answer.status, answer.colour_answer)
+            return ChangeAnswer(answer, int(final_score), data, data_in_bins)
 
 
     return render(request, 'search/search.html', locals())
@@ -542,8 +549,8 @@ def SearchSessionStart(request, user_id, task_id):
     if not ImagesInOneLine.objects.exists():
         CreateCatolog(n_bins, "static/media/product/")
     #method_id = random.randint(0, n_methods-1)
+
     task = OneTask.objects.get(id=task_id)
-    task.save()
     CreateGame(user_id, task)
     target_image_id = TakeImageIdFromTask(task)
     method_id = int(task.methods.strip().split("\t")[task.iteration])
