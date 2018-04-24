@@ -42,13 +42,17 @@ def Statistics(request):
     tasks = [task for task in tasks if task.iteration >= 5]
     games_sucsess = [0. for i in range(n_methods)]
     games_fall = [0. for i in range(n_methods)]
+    games_length = [0. for i in range(n_methods)]
     for i in tasks:
         game = Game.objects.filter(task=i)
         for g in game:
             if g.sucsess == 1:
                 games_sucsess[g.method_id] += 1
+                games_length[g.method_id] += g.iteration
             if g.sucsess == -1:
                 games_fall[g.method_id] += 1
+    for i in range(n_methods):
+        games_length[i] = float(games_length[i]) / (games_sucsess[i] + 1e-10)
     return render(request, 'final_stage/statistics.html', locals())
 
 def FinalStage(request, game_id, product_id):
