@@ -502,8 +502,16 @@ def landing(request, game_id):
     # --------------------------spam_detector-------------------------------------------
 
     else:"""
-    data, data_in_bins, answer, lines, images_in_bins = \
-        Get_data_data_in_bins_answer(game.id, n_bins, n_pictures_per_bin, n_features)
+    try:
+        data, data_in_bins, answer, lines, images_in_bins = \
+            Get_data_data_in_bins_answer(game.id, n_bins, n_pictures_per_bin, n_features)
+    except:
+        data = game.data.strip().split()
+        random.shuffle(data)
+        data = data[:25]
+        game.data = "\n".join(data)
+        game.save()
+        return HttpResponseRedirect("/finish/" + str(game.id) + "/")
 
 
     imgs = []
