@@ -331,6 +331,11 @@ def EndGame(request, game_id):
     task = game.task
     task_id = task.id
     form = FeedbackForm(request.POST or None)
+    task_code = task.task_code
+    while(len(OneTask.objects.filter(task_code=task_code)) > 1):
+        task.task_code = np.random.randint(0,1000000)
+        task_code = task.task_code
+        task.save()
     if request.method == 'POST':
         if form.is_valid():
             print(form.cleaned_data)

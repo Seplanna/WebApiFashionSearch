@@ -8,6 +8,7 @@ class OneTask(models.Model):
     methods = models.CharField(max_length=10)
     images = models.CharField(max_length=128)
     task_number = models.IntegerField(default=-1)
+    task_code = models.IntegerField(default=-1)
     iteration = models.IntegerField(default=0)
 
     def __str__(self):
