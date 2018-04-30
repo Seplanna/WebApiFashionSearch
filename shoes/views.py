@@ -31,6 +31,8 @@ def ChooseTask(user_id):
 
 def TakeImageIdFromTask(task):
     image = task.images.split("\t")[task.iteration]
+    if not Shoe.objects.filter(image=("target_products/" + image)).exists():
+        Shoe.objects.create(image=("target_products/" + image))
     product = Shoe.objects.get(image=("target_products/" + image))
     return product.id
 

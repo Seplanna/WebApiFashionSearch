@@ -446,6 +446,10 @@ def ChoseTheBestPicture(request, game_id):
     skip = True
 
     data, data_in_bins, answer, lines, images_in_bins = Get_data_data_in_bins_answer(game_id, n_bins, n_pictures_per_bin, n_features)
+
+    if (answer.status != "best image"):
+        return HttpResponseRedirect("/login/0/")
+
     imgs = []
     for line in lines:
         imgs.append(OneImage.objects.filter(line_id=line, game_id=Game.objects.get(id=game_id)))
@@ -513,7 +517,8 @@ def landing(request, game_id):
         game.save()
         return HttpResponseRedirect("/finish/" + str(game.id) + "/")
 
-
+    if (answer.status == "best image"):
+        return HttpResponseRedirect("/login/0/")
     imgs = []
     for i in range(n_bins):
         line = ImagesInOneLine.objects.get(line_number=i)
