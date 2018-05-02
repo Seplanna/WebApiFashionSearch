@@ -37,7 +37,7 @@ def CreateProfilesFromCopy(path_login, path_user_profile):
 def Statistics(request):
     #Copy_logins_and_Profiles("static/text_files/logins.txt", "static/text_files/user_profile.txt")
     n_methods = 6
-    CreateProfilesFromCopy("static/text_files/logins.txt", "static/text_files/user_profile.txt")
+    #CreateProfilesFromCopy("static/text_files/logins.txt", "static/text_files/user_profile.txt")
     tasks = OneTask.objects.all()
     tasks = [task for task in tasks if task.iteration >= 5]
     games_sucsess = [0. for i in range(n_methods)]
@@ -45,10 +45,18 @@ def Statistics(request):
     games_length = [0. for i in range(n_methods)]
     for i in tasks:
         game = Game.objects.filter(task=i)
+        max_sucsess_iteration = 0
+        for g in game:
+            if g.sucsess == 1:
+                if (g.iteration > max_sucsess_iteration):
+                    max_sucsess_iteration = g.iteration
+                    print("SUCSEESS ITERATIONS = ", g.iteration)
+
+        print("Normalization = ", max_sucsess_iteration)
         for g in game:
             if g.sucsess == 1:
                 games_sucsess[g.method_id] += 1
-                games_length[g.method_id] += g.iteration
+                games_length[g.method_id] += (float(g.iteration) + 1e-10) / (max_sucsess_iteration + 1e-10)
             if g.sucsess == -1:
                 games_fall[g.method_id] += 1
     for i in range(n_methods):
