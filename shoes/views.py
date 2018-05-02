@@ -19,7 +19,7 @@ def ChooseTask(user_id):
 
     used_tasks = [task_number.task_number for task_number in OneTask.objects.all() if
                   task_number.iteration == n_images]
-    all_tasks = open("static/text_files/tasks1.txt").readlines()[:-1][:5]
+    all_tasks = open("static/text_files/tasks1.txt").readlines()[:-1][5:10]
     free_tasks = [i for i in range(len(all_tasks)) if i not in used_tasks]
     if len(free_tasks) == 0:
         free_tasks = [i for i in range(len(all_tasks))]
@@ -27,6 +27,7 @@ def ChooseTask(user_id):
     task = all_tasks[task_number].strip().split("\t")
     images = "\t".join(task[:n_images])
     methods = "\t".join(task[n_images:])
+    task_number += 5
     return OneTask.objects.create(images=images, methods=methods, task_number=task_number, user_id=user_id)
 
 def TakeImageIdFromTask(task):
