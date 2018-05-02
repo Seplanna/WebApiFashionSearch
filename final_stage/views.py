@@ -44,6 +44,15 @@ def Statistics(request):
     games_fall = [0. for i in range(n_methods)]
     games_length = [0. for i in range(n_methods)]
     for i in tasks:
+        spam_game = Game.objects.get(task=i, method_id=5)
+        shoe = OneImage.objects.get(id=spam_game.point)
+        image = os.path.basename(shoe.image.path)
+        if image not in ["8049022.585.jpg", "8122735.594.jpg", "8049088.379012.jpg",
+                         "8064935.365347.jpg", "8008094.585.jpg",
+                         "8096669.574.jpg", "8101487.7122.jpg",
+                         "7804711.1334.jpg", "7448464.12664.jpg", "8036460.36989.jpg"]:
+            continue
+
         game = Game.objects.filter(task=i)
         max_sucsess_iteration = 0
         for g in game:
