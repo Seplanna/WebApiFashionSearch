@@ -24,6 +24,11 @@
         {% block content %}
             <h1 class="title"> {{ title }}</h1>
             <h1 class="title">Login please or create account</h1>
+            <p class="title1">
+                You can log in with any username or password.</br>
+                Do not specify information that can be used to identify you.</br>
+                We ask you to log in to continue the survey, even if something goes wrong.
+            </p>
             <div>
                 <form action="/create_account/0/" method="get" class="text-center"> {% csrf_token %}
                     <button type="submit" class="btn btn-primary btn-orange btn-margin">
