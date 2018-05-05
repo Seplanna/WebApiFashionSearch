@@ -5,11 +5,12 @@ from landing.models import AssessorProfile
 
 class OneTask(models.Model):
     user_id = models.IntegerField(default=-1)
-    methods = models.CharField(max_length=10)
+    methods = models.CharField(max_length=12)
     images = models.CharField(max_length=128)
     task_number = models.IntegerField(default=-1)
     task_code = models.IntegerField(default=-1)
     iteration = models.IntegerField(default=0)
+    aproove = models.IntegerField(default=0)
 
     def __str__(self):
         return "%s" % (self.id)
