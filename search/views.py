@@ -346,9 +346,11 @@ def EndGame(request, game_id):
     return render(request, 'search/end_5_sessions.html', locals())
 
 def SearchSessionEnd(request, game_id):
-    n_games = n_methods
+
     game = Game.objects.get(id=game_id)
     task = game.task
+    n_games = len(task.methods.strip().split("\t"))
+    print("n_games ", n_games)
     task.iteration += 1
     task.save()
     products = Shoe.objects.all()
@@ -366,6 +368,8 @@ def Description(request, game_id, product_id):
     title = "Step 5: Describe the difference"
     end_game_description = True
     game = Game.objects.get(id=game_id)
+    n_methods = len(game.task.methods.strip().split())
+    print("n_methods = ", n_methods)
     shoe = OneImage.objects.get(id = product_id)
 
     game.point = product_id
@@ -390,6 +394,7 @@ def Description(request, game_id, product_id):
         new_form.save()
 
         n_search_sessions = len(Game.objects.filter(user_id=game.user_id))
+        print("NNNNN = ", n_methods)
         finished_5 = n_search_sessions % n_methods == 0
         if (finished_5):
             return HttpResponseRedirect("/end_the_game/"+ str(game.id) + "/")

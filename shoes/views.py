@@ -7,7 +7,7 @@ import subprocess
 #from products.models import *
 
 def ChooseTask(user_id):
-    n_images = 6
+    n_images = 5
 
     if (OneTask.objects.filter(user_id=user_id).exists()):
         tasks = OneTask.objects.filter(user_id=user_id)
@@ -19,7 +19,7 @@ def ChooseTask(user_id):
 
     used_tasks = [task_number.task_number for task_number in OneTask.objects.all() if
                   task_number.iteration >= n_images]
-    all_tasks = open("static/text_files/tasks1.txt").readlines()[:-1][5:10]
+    all_tasks = open("static/text_files/tasks1.txt").readlines()[:-1]
     free_tasks = [i for i in range(len(all_tasks)) if i not in used_tasks]
     if len(free_tasks) == 0:
         free_tasks = [i for i in range(len(all_tasks))]
@@ -27,12 +27,12 @@ def ChooseTask(user_id):
     task = all_tasks[task_number].strip().split("\t")
     images = "\t".join(task[:n_images])
     methods = "\t".join(task[n_images:])
-    task_number += 5
     return OneTask.objects.create(images=images, methods=methods, task_number=task_number, user_id=user_id)
 
 def TakeImageIdFromTask(task):
     image = task.images.split("\t")[task.iteration]
     if not Shoe.objects.filter(image=("target_products/" + image)).exists():
+
         Shoe.objects.create(image=("target_products/" + image))
     product = Shoe.objects.get(image=("target_products/" + image))
     return product.id

@@ -37,7 +37,7 @@
                         But we will be grateful if you do some more. </h1>
                     {% endif %}
                     {% if not  finished_5%}
-                        <h1 class="title2">You finished {{ n_search_sessions }} search sessions out of 6.</h1>
+                        <h1 class="title2">You finished {{ n_search_sessions }} search sessions out of {{ n_games }}.</h1>
                     {% endif %}
                     <div class="fake_img">
                             <form action="/shoes/{{task_id}}/{{user_id}}" method="get" class="text-center"> {% csrf_token %}
