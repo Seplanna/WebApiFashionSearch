@@ -19,6 +19,7 @@ from search import views
 
 urlpatterns = [
     url(r'^search/(?P<game_id>\w+)/$', views.landing, name='landing'),
+    url(r'^first_step/(?P<game_id>\w+)/$', views.FirstStepInGame, name='first_step'),
     url(r'^best_picture/(?P<game_id>\w+)/$', views.ChoseTheBestPicture, name='ChoseTheBestPicture'),
     url(r'^finish/(?P<game_id>\w+)/$', views.Finish, name='Finish'),
     url(r'^will_you_buy/(?P<game_id>\w+)/(?P<product_id>\w+)/$', views.Will_you_buy, name='will_you_buy'),

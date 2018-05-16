@@ -5,6 +5,7 @@ from shoes.views import TakeImageIdFromTask, ChooseTask
 import os
 import numpy as np
 import random
+from sklearn.cluster import KMeans
 
 n_bins = 5
 n_pictures_per_bin = 5
@@ -113,6 +114,21 @@ def  Real1_one_feature_from_given_features(features, data_len, n_bins, n_picture
         print(median)
     return ReturnImagesCLosedToMedian(features_in_bins, data_by_bins,  n_bins, n_pictures_per_bin, median), data_by_bins
 #----------------------end delete-------------------------------------------
+
+def CreateFirstQuestion(data, n_clusters):
+    data = list(data)
+    example_histogramms = []
+    for feature in data:
+        example_histogramms.append([float(f) for f in feature.split("_")[:-1]])
+    example_histogramms = np.array(example_histogramms)
+    kmeans = KMeans(n_clusters=n_clusters, random_state=0).fit(example_histogramms)
+    images = []
+    for cl in range(n_clusters):
+        images.append(data[np.argmin(np.linalg.norm(example_histogramms-kmeans.cluster_centers_[cl], axis=1))])
+    print("DEL = ", images, n_clusters)
+    return images
+
+
 def CreateCatolog(n_bins, data_path):
     lines = []
     for l in range(n_bins+1):
@@ -199,22 +215,26 @@ def CreateGame(user_id, task):
         data_path = TakeDatasetFromMethodNumber(method_id)
         with open(data_path, 'r') as data_:
             data = data_.read()
+
+
         game = Game.objects.create(user_id=user_id, target_image_id=target_image_id, method_id=method_id,
                                    data=data, task=task)
+
         lines = [line for line in ImagesInOneLine.objects.all() if line.line_number >= 0]
 
-        data_path_ = "static/media/product/"
-        data = []
-        for root, subdirs, files in os.walk(data_path_):
-            for f in files:
-                if os.path.splitext(f)[1].lower() in ('.jpg', '.jpeg'):
-                    data += [os.path.join(root, f)]
+        try:
+            data = CreateFirstQuestion(np.random.choice(data.split(), 1500, replace=False), len(lines)*n_pictures_per_bin)
+        except:
+            data = list(np.random.choice(data.strip().split(), len(lines)*n_pictures_per_bin, replace=False))
+        data_path_ = "product/"
 
+        index = 0
         for line in lines:
             for im in range(n_pictures_per_bin):
-                d_ = random.choice(data)
-                d_ = "/".join((d_.split("/")[2:]))
+                d_ = data[index].split("_")[-1]
+                d_ = data_path_ + d_
                 OneImage.objects.create(game_id=game, line_id=line, image=d_)
+                index += 1
 
 def ChangeAnswer(answer, answer_, data, data_in_bins):
     print("ANSWER")
@@ -567,6 +587,39 @@ def landing(request, game_id):
 
     return render(request, 'search/search.html', locals())
 
+def FirstStepInGame(request, game_id):
+    game = Game.objects.get(id=game_id)
+    game_notsucseess = False
+    skip = False
+
+    lines = [line for line in ImagesInOneLine.objects.all() if line.line_number >= 0]
+    imgs = []
+    for line in lines:
+        imgs.append(OneImage.objects.filter(line_id=line, game_id=Game.objects.get(id=game_id)))
+
+    if not Answer.objects.filter(game_id=game, iteration=-1).exists():
+        Answer.objects.create(game_id=game, iteration=-1)
+
+    answer = Answer.objects.get(game_id=game, iteration=-1)
+    if request.GET.get('NEXT') == "SKIP":
+        answer_ = -1
+        answer.best_image_id = answer_
+        answer.save()
+        return HttpResponseRedirect("/search/" + str(game.id) + "/")
+    try:
+        answer_ = int(request.GET.get('NEXT'))
+        answer.best_image_id = answer_
+        answer.save()
+        image = OneImage.objects.get(id=answer_)
+        game = answer.game_id
+        game.point_features = GetFeaturesForOneImage(image.image.url.split("/")[-1], game.data)
+        game.point = answer_
+        game.save()
+        return HttpResponseRedirect("/search/" + str(game.id) + "/")
+
+    except:
+        print(request.GET.get('NEXT'))
+    return render(request, 'search/best_picture.html', locals())
 
 def SearchSessionStart(request, user_id, task_id):
     if not ImagesInOneLine.objects.exists():
