@@ -1,0 +1,90 @@
+{% load static %}
+
+<!-- Custom styles -->
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!-- Bootstrap-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require-jquery/0.25.0/require-jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400" rel="stylesheet">
+    <!-- Custom styles -->
+     <link rel="stylesheet" href="{% static 'style2.css' %}">
+
+    <style>
+    </style>
+
+
+</head>
+
+<body class="general-container1">
+
+{% block content %}
+
+        <div class="general-container3 text-center" style="width:1358px">
+
+            <div class="fake_img_no_border">
+                <h1 class="title5">DON'T PUSH THE BUTTON GO BACK IN YOUR BROWSER!
+                    Iteration number: {{ game.iteration }}</h1>
+            </div>
+
+
+
+        </div>
+
+        <div >
+            <br class="row">
+                <div class="container" style="width:1358px">
+
+                    {% for line in imgs %}
+                        <div class="fake_img">
+                            {% for image_item in line %}
+                                <img src="{{ image_item.image.url }}" class="img-responsive">
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+
+
+                </div>
+
+                <p class="title1">
+                                You are asked to name the property of the images that changes from left to right,<br>
+                                and indicate whether it is increasing (or simply present) or decreasing (absent)
+                    from left to right.<br>
+                The properties include characteristics such as color or layout or general feel.<br>
+                                You also are asked how obvious the property is, on a scale of 1 (“very subtle”) to 4 (“obvious”).
+                </p>
+
+                <form action="" method="post" class="text-center"> {% csrf_token %}
+                    {{ form.as_p }}
+                    <div>
+                        <button type="submit", class="btn btn-primary btn-orange">
+                            send
+                        </button>
+                    </div>
+
+                </form>
+
+                <div class="container">
+                    <a href="https://drive.google.com/file/d/19aztztl3_if_YhlPWY0ItGiv38wkwzHB/view?usp=sharing"
+                    title="Download movie" style="color:crimson", class="title1">Confused? Watch the video tutorial here.</a>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+        </div>
+
+
+{% endblock %}
+
+
+</body>
