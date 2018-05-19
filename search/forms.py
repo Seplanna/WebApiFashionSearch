@@ -15,16 +15,10 @@ class AnswerForm(forms.Form):
                ('4', '5th Column'),
                ('-1', "Don't know")]
 
-    Answer_color = forms.ChoiceField(choices=CHOICES,
+    Answer = forms.ChoiceField(choices=CHOICES,
                                widget=forms.RadioSelect(
                                    )
                                  )
-    Answer_shape = forms.ChoiceField(choices=CHOICES,
-                               widget=forms.RadioSelect(
-                                   )
-                                 )
-
-
 
 class FeedbackForm(forms.ModelForm):
 
@@ -32,3 +26,8 @@ class FeedbackForm(forms.ModelForm):
         model = Feedback
         exclude = ["task_id"]
 
+
+class InterpretabilityForm(forms.ModelForm):
+    class Meta:
+        model = Interpretability
+        exclude = ["iteration", "game_id"]

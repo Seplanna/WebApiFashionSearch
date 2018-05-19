@@ -21,16 +21,21 @@ class Game(models.Model):
     def __str__(self):
         return "%s" % (self.id)
 
+class Interpretability(models.Model):
+    game_id = models.ForeignKey(Game, default=1)
+    iteration = models.IntegerField(default=-1)
+    property = models.CharField(max_length=128, default='')
+    increasing_choises=(("I", "increses"), ("D", "decreases"))
+    increasing = models.CharField(max_length=3, choices=increasing_choises)
+    how_obvious_it_is = models.IntegerField(default=-1)
+
+
+
 class Answer(models.Model):
     iteration = models.IntegerField(default=-1)
     feature_n = models.IntegerField(default=0)
-    colour_answer = models.IntegerField(default=-1)
-    shape_answer = models.IntegerField(default=-1)
-    best_image_id = models.IntegerField(default=-1)
-    status = models.CharField(max_length=128, default="color")
+    answer = models.IntegerField(default=-1)
     game_id = models.ForeignKey(Game, default=1)
-
-
     def __str__(self):
         return "%s_%s" % (self.id, self.status)
 

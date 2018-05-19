@@ -70,3 +70,10 @@ class FeedbackAdmin(admin.ModelAdmin):
     extra=0
 
 admin.site.register(Feedback, FeedbackAdmin)
+
+class InterpretabilityAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Interpretability._meta.fields]
+    class Meta:
+        model = Interpretability
+
+admin.site.register(Interpretability, InterpretabilityAdmin)

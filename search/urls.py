@@ -19,6 +19,7 @@ from search import views
 
 urlpatterns = [
     url(r'^search/(?P<game_id>\w+)/$', views.landing, name='landing'),
+    url(r'^iterpretability/(?P<game_id>\w+)/$', views.Interpretability, name='Interpretability'),
     url(r'^first_step/(?P<game_id>\w+)/$', views.FirstStepInGame, name='first_step'),
     url(r'^best_picture/(?P<game_id>\w+)/$', views.ChoseTheBestPicture, name='ChoseTheBestPicture'),
     url(r'^finish/(?P<game_id>\w+)/$', views.Finish, name='Finish'),
@@ -26,7 +27,8 @@ urlpatterns = [
     url(r'^start_session/(?P<user_id>\w+)/(?P<task_id>\w+)/$', views.SearchSessionStart, name='SearchSessionStart'),
     url(r'^description_best_image/(?P<game_id>\w+)/(?P<product_id>\w+)/$', views.Description, name='Description'),
     url(r'^search_session_end/(?P<game_id>\w+)/$', views.SearchSessionEnd, name='SearchSessionEnd'),
-    url(r'^end_the_game/(?P<game_id>\w+)/$', views.EndGame, name='EndGame')
+    url(r'^end_the_game/(?P<game_id>\w+)/$', views.EndGame, name='EndGame'),
+    url(r'^WrightIteration/$', views.Statistics, name='Statistics')
 
 
 ]
