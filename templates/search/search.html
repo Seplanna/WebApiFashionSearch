@@ -80,27 +80,13 @@
                 <div class="container" style="width:1358px;">
                     <form action="" method="post" class="text-center"> {% csrf_token %}
                         <div style="border:1px solid #dddddd;">
-                            <div class="title4"> If the columns don't differ by color push the button
+                            <div class="title4"> If the columns don't differ push the button
                                 "No difference".
-                                Otherwise, choose the closest column by color:
+                                Otherwise, choose the closest column:
                             </div>
-                            {% for radio in form.Answer_color %}
+                            {% for radio in form.Answer %}
                                 <div class="fake_img_no_border">
 
-                                        <div class="btn btn-primary btn-orange button_choose_shoe">
-                                            {{ radio }}
-                                        </div>
-
-                                </div>
-                            {% endfor %}
-                        </div>
-                        <div style="border:1px solid #dddddd;">
-                            <div class="title4">
-                                If the columns don't differ by shape push the button "No difference".
-                                Otherwise, choose the closest column by shape:
-                            </div>
-                            {% for radio in form.Answer_shape %}
-                                <div class="fake_img_no_border">
                                         <div class="btn btn-primary btn-orange button_choose_shoe">
                                             {{ radio }}
                                         </div>
