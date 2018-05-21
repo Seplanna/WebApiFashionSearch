@@ -16,13 +16,15 @@ def ChooseTask(user_id):
         if len(tasks_not_finished) > 0:
             return tasks_not_finished[0]
 
-    all_tasks = open("static/text_files/tasks1.txt").readlines()[:-1]
+    all_tasks = open("static/text_files/tasks1.txt").read().strip()
+    all_tasks = all_tasks.split("\n")
     used_tasks = [task_number.task_number for task_number in OneTask.objects.all() if
-                  task_number.task_number < len(all_tasks) - 10]
+                  task_number.aproove == 1 or (task_number.iteration == n_images and task_number.aproove == 0)]
 
     free_tasks = [i for i in range(len(all_tasks)) if i not in used_tasks]
     if len(free_tasks) == 0:
         free_tasks = [i for i in range(len(all_tasks))]
+    print("LEN OF FREE TASKS = ", len(free_tasks))
     task_number = random.choice(free_tasks)
     task = all_tasks[task_number].strip().split("\t")
     images = "\t".join(task[:n_images])
