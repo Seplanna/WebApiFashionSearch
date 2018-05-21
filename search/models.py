@@ -25,8 +25,6 @@ class Interpretability(models.Model):
     game_id = models.ForeignKey(Game, default=1)
     iteration = models.IntegerField(default=-1)
     property = models.CharField(max_length=128, default='')
-    increasing_choises=(("I", "increses"), ("D", "decreases"))
-    increasing = models.CharField(max_length=3, choices=increasing_choises)
     how_obvious_it_is = models.IntegerField(default=-1)
 
 
