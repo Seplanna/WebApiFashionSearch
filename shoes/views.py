@@ -19,7 +19,8 @@ def ChooseTask(user_id):
     all_tasks = open("static/text_files/tasks1.txt").read().strip()
     all_tasks = all_tasks.split("\n")
     used_tasks = [task_number.task_number for task_number in OneTask.objects.all() if
-                  task_number.aproove == 1 or (task_number.iteration == n_images and task_number.aproove == 0)]
+                  task_number.aproove == 1 or (task_number.iteration == n_images and task_number.aproove == 0)
+                  or (task_number.task_number < 5)]
 
     free_tasks = [i for i in range(len(all_tasks)) if i not in used_tasks]
     if len(free_tasks) == 0:

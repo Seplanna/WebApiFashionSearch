@@ -34,6 +34,7 @@ def login(request, signal):
         title = ""
     if (signal == "1"):
         title = "Sorry this combination does not exist. Try again."
+    redirect_to_create_account = "/create_account/0/"
     form = LoginForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
         print(form.cleaned_data)

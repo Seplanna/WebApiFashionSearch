@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'shoes',
     'search',
     'instructions',
+    'interpretability',
     'final_stage',
 
 ]

@@ -16,6 +16,7 @@ class Game(models.Model):
     data = models.TextField(default="")
     point_features = models.TextField(default="")
     iteration = models.IntegerField(default=0)
+    change_data = models.BooleanField(default=False)
 
 
     def __str__(self):
@@ -27,15 +28,11 @@ class Interpretability(models.Model):
     property = models.CharField(max_length=128, default='')
     how_obvious_it_is = models.IntegerField(default=-1)
 
-
-
 class Answer(models.Model):
     iteration = models.IntegerField(default=-1)
     feature_n = models.IntegerField(default=0)
     answer = models.IntegerField(default=-1)
     game_id = models.ForeignKey(Game, default=1)
-    def __str__(self):
-        return "%s_%s" % (self.id, self.status)
 
 class ImagesInOneLine(models.Model):
     line_number = models.IntegerField(default=-1)

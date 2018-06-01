@@ -1,11 +1,13 @@
 from django.shortcuts import render, HttpResponseRedirect
 from .forms import ImagesInOneLine, OneImage, Game, Answer, ShoeDescriptionByAssessorForm, \
-    Shoe, ShoeDescriptionByAssessor, AnswerForm, OneTask, FeedbackForm, InterpretabilityForm
+    Shoe, ShoeDescriptionByAssessor, AnswerForm, OneTask, FeedbackForm, InterpretabilityForm, \
+    Interpretability
 from shoes.views import TakeImageIdFromTask, ChooseTask
 import os
 import numpy as np
 import random
 from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
 
 n_bins = 5
 n_pictures_per_bin = 5
@@ -57,32 +59,28 @@ def ReturnImagesCLosedToMedian(features_in_bins, data_by_bins, n_bins, n_picture
             closest_to_median_images[bin].append(data_by_bins[bin][argsort[i]])
     return closest_to_median_images
 
-
-
-def  Real1_one_feature_from_given_features(features, data_len, n_bins, n_pictures_per_bin, feature_n, point_features,
-                                           point=-1
-                                           ):
+def DataToBins(features, data_len, feature_n, n_bins):
     features_in_bins = []
     feature_values = []
     for d in range(len(data_len)):
-        features_= np.array(features[d])
+        features_ = np.array(features[d])
         feature_value = features_[feature_n]
         feature_values.append(feature_value)
         features_ = [features_[f] for f in range(features_.shape[0]) if f != feature_n]
         features_in_bins.append(features_)
 
     bins = DevideFeatureIntoBinsFromData(feature_values, n_bins)
-    #print("BINS VALUES = ", bins)
+    # print("BINS VALUES = ", bins)
 
     data_by_bins = [[] for i in range(n_bins)]
 
     for d in range(len(feature_values)):
         bin = RecieveBinOfTheFeature(feature_values[d], bins, n_bins)
         data_by_bins[bin].append(d)
-#--------------------------For the situation when value of some bins is equal---------------------
+        # --------------------------For the situation when value of some bins is equal---------------------
     first_bin = 0
     last_bin = 0
-    #print("DATA_BY_BINS_LENGTH = ", [len(bin) for bin in data_by_bins])
+    # print("DATA_BY_BINS_LENGTH = ", [len(bin) for bin in data_by_bins])
     while last_bin < len(data_by_bins):
         if len(data_by_bins[last_bin]) > 0:
             if (last_bin - first_bin == 0):
@@ -100,10 +98,16 @@ def  Real1_one_feature_from_given_features(features, data_len, n_bins, n_picture
                 first_bin = last_bin
         else:
             last_bin += 1
-    #print("DATA_BY_BINS_LENGTH1 = ", [len(bin) for bin in data_by_bins])
-# --------------------------For the situation when value of some bins is equal---------------------
+            # print("DATA_BY_BINS_LENGTH1 = ", [len(bin) for bin in data_by_bins])
+            # --------------------------For the situation when value of some bins is equal---------------------
+    return features_in_bins, data_by_bins, bins
 
 
+def  Real1_one_feature_from_given_features(features, data_len, n_bins, n_pictures_per_bin, feature_n, point_features,
+                                           point=-1
+                                           ):
+
+    features_in_bins, data_by_bins, bins = DataToBins(features, data_len, feature_n, n_bins)
     #print("POINT =", point)
     if point < 0:
         median = GetMedian(features_in_bins)
@@ -128,7 +132,6 @@ def CreateFirstQuestion(data, n_clusters):
     print("DEL = ", images, n_clusters)
     return images
 
-
 def CreateCatolog(n_bins, data_path):
     lines = []
     for l in range(n_bins+1):
@@ -145,6 +148,7 @@ def CreateCatolog(n_bins, data_path):
         print(d_)
         OneImage.objects.create(image=d_)"""
 #-----------------------------------------------------------------------------
+
 def GetFeturesFromText(text):
     data = text.strip().split("\n")
     features = []
@@ -153,7 +157,36 @@ def GetFeturesFromText(text):
         features.append([float(f) for f in d1])
     return np.array(features), data
 
+def PCA_(latent, feature_dimension):
+    latent_ = latent.T
+    normed = (latent_ - latent_.mean(axis=0))/ (latent_.std(axis=0)+1e-5)
+    normed = normed.T
+
+    pca = PCA(n_components=feature_dimension)
+    pca.fit(normed)
+    latent1 = pca.fit_transform(normed)
+    print("latent_shape ", latent1.shape)
+    return latent1 + 10
+
+def GetFeatures(text, method_id, feature_n, change_feature):
+    features,data = GetFeturesFromText(text)
+
+    if method_id == 1 and change_feature:
+        features = PCA_(features, n_features)
+        features = features.T
+        permutation = range(n_features - feature_n, n_features) + range(n_features - feature_n)
+        features = features[permutation]
+        features = features.T
+        data1 = ["_".join(str(f) for f in features[example_number]) + "_" + data[example_number].split("_")[-1]
+                for example_number in range(len(data))]
+        data = data1
+        print("NEW DATA = ", data[0])
+
+    print("Generated_data")
+    return features, data
+
 def GetFeaturesForOneImage(image_url, data):
+    print(data[0])
     data1 = data.strip().split("\n")
     for d in range(len(data1)):
         if data1[d].split("_")[-1] == image_url:
@@ -194,7 +227,7 @@ def GhangeTheOrderOfTheImages(ims, lines):
 
 def TakeDatasetFromMethodNumber(number):
     mehtods = {0:"static/text_files/My.csv",
-               1:"static/text_files/ClusterDirection.csv",
+               1: "static/text_files/PCA_AutoEncoder.csv",
                2: "static/text_files/InfoGAN.csv",
                3: "static/text_files/PCA_AutoEncoder.csv",
                4: "static/text_files/PCA_GIST.csv",
@@ -205,6 +238,8 @@ def TakeDatasetFromMethodNumber(number):
 def CreateGame(user_id, task):
     target_image_id = TakeImageIdFromTask(task)
     method_id = int(task.methods.strip().split("\t")[task.iteration])
+    #method_id = [3,1,2,4,5][task.iteration]
+    print("CREATE GAME ", task.iteration, method_id)
     if Game.objects.filter(user_id=user_id, target_image_id=target_image_id, method_id=method_id,
                                task=task).exists():
         Game.objects.filter(user_id=user_id, target_image_id=target_image_id, method_id=method_id,
@@ -246,6 +281,8 @@ def ChangeAnswer(answer, answer_, data, data_in_bins):
         line = answer_
         data = [data[i] for i in data_in_bins[line]]
         game.data = "\n".join(data)
+        game.change_data = True
+        game.save()
         print("DATA = ", len(data))
     game.feature_n += 1
     game.iteration += 1
@@ -259,7 +296,7 @@ def Get_data_data_in_bins_answer(game_id, n_bins, n_pictures_per_bin, n_features
         Answer.objects.create(game_id=game, iteration=game.iteration)
     answer = Answer.objects.filter(game_id=game, iteration=game.iteration)[0]
 
-    features,data = GetFeturesFromText(game.data)
+    features,data = GetFeatures(game.data, game.method_id, game.feature_n%n_features, game.change_data)
     print("SHAPE = ", features.shape)
 
     images_in_bins, data_in_bins = \
@@ -315,64 +352,6 @@ def SpamQuestionCreate(game_id):
                     ind += 1
     return task.iteration
 
-def NWrightIterations(game_id):
-    game = Game.objects.get(id=game_id)
-    method = game.method_id
-    target_image = Shoe.objects.get(id=game.target_image_id).image
-
-    data_path = TakeDatasetFromMethodNumber(method)
-    with open(data_path, 'r') as data_:
-        data = data_.read()
-
-
-    answers = list(Answer.objects.filter(game_id = game.id))
-    answers.sort(key=lambda x: x.iteration)
-
-    result = 0
-    for answer in answers:
-        features, data_ = GetFeturesFromText(data)
-        print("DEL = ", features.shape, len(data_), answer.iteration, answer.colour_answer, answer.shape_answer)
-        if (answer.iteration == -1):
-            continue
-        if ((answer.shape_answer >=0 and answer.colour_answer >= 0 and
-                (answer.shape_answer == answer.colour_answer)) or (answer.shape_answer * answer.colour_answer <= 0
-                                                                   and (answer.shape_answer < 0 or answer.colour_answer < 0))):
-            result += 1
-            images_in_bins, data_in_bins = \
-            Real1_one_feature_from_given_features(features,
-                                                  data_,
-                                                  n_bins,
-                                                  n_pictures_per_bin,
-                                                  answer.iteration % n_features,
-                                                  game.point_features,
-                                                  -1)
-            data = [data_[d] for d in data_in_bins[answer.shape_answer]]
-            data_ = set([d.split("_")[-1] for d in data])
-            data = "\n".join(data)
-            return int(os.path.basename(target_image.path) in data_)
-            if not os.path.basename(target_image.path) in data_:
-               return result
-    return -1
-
-def Statistics(request):
-    tasks = OneTask.objects.filter(aproove=1)
-    #tasks = [task for task in tasks if task.id >= 309]
-    method_results = [0. for i in range(n_methods)]
-    n_games_with_methods = [1e-10 for i in range(n_methods)]
-    for task in tasks:
-        games = Game.objects.filter(task=task)
-        for game in games:
-            method = game.method_id
-            res = NWrightIterations(game.id)
-            if (res >= 0):
-                n_games_with_methods[method] += 1
-                method_results[method] += NWrightIterations(game.id)
-    print(method_results)
-    print(n_games_with_methods)
-    return render(request, 'search/end_5_sessions.html', locals())
-
-
-
 def EndGame(request, game_id):
     game = Game.objects.get(id=game_id)
     task = game.task
@@ -416,7 +395,7 @@ def Description(request, game_id, product_id):
     end_game_description = True
     game = Game.objects.get(id=game_id)
     n_methods = len(game.task.methods.strip().split())
-    print("n_methods = ", n_methods)
+    print("n_methods = ", n_methods, game.task)
     shoe = OneImage.objects.get(id = product_id)
 
     game.point = product_id
@@ -498,30 +477,34 @@ def Finish(request, game_id):
         print(request.GET.get('NEXT'))
     return render(request, 'search/best_picture.html', locals())
 
+
 def ChoseTheBestPicture(request, game_id):
-    #user_id = USER_ID
-    skip = True
+    game = Game.objects.get(id=game_id)
+    game_notsucseess = False
+    skip = False
 
-    data, data_in_bins, answer, lines, images_in_bins = Get_data_data_in_bins_answer(game_id, n_bins, n_pictures_per_bin, n_features)
-
-    if (answer.status != "best image"):
-        return HttpResponseRedirect("/login/0/")
-
+    lines = [line for line in ImagesInOneLine.objects.all() if line.line_number >= 0 and line.line_number < n_bins]
     imgs = []
     for line in lines:
         imgs.append(OneImage.objects.filter(line_id=line, game_id=Game.objects.get(id=game_id)))
 
-    if request.GET.get('NEXT') == "SKIP":
-        return ChangeAnswer(answer, -1, data, data_in_bins)
+    answer = Answer.objects.get(game_id=game, iteration=game.iteration)
     try:
         answer_ = int(request.GET.get('NEXT'))
-        return ChangeAnswer(answer, answer_, data, data_in_bins)
-
+        answer.best_image_id = answer_
+        answer.save()
+        image = OneImage.objects.get(id=answer_)
+        game = answer.game_id
+        game.point_features = GetFeaturesForOneImage(image.image.url.split("/")[-1], game.data)
+        game.point = answer_
+        game.iteration += 1
+        game.feature_n += 1
+        game.save()
+        return HttpResponseRedirect("/iterpretability/" + str(game.id) + "/")
 
     except:
         print(request.GET.get('NEXT'))
     return render(request, 'search/best_picture.html', locals())
-
 
 
 def landing(request, game_id):
@@ -568,6 +551,7 @@ def landing(request, game_id):
         game.save()
         return HttpResponseRedirect("/finish/" + str(game.id) + "/")
 
+    interpretability = Interpretability.objects.get(game_id=game, iteration=game.iteration).property
     form = AnswerForm(request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
@@ -577,23 +561,27 @@ def landing(request, game_id):
 
     return render(request, 'search/search.html', locals())
 
-def Interpretability(request, game_id):
+def InterpretabilityFunction(request, game_id):
     print("START")
 
 
     game = Game.objects.filter(id=game_id)[0]
     if FinishIfNotEnoughImages(game_id, n_bins, n_pictures_per_bin):
         return HttpResponseRedirect("/finish/" + str(game.id) + "/")
-    try:
-        data, data_in_bins, answer, lines, images_in_bins = \
-            Get_data_data_in_bins_answer(game.id, n_bins, n_pictures_per_bin, n_features)
-    except:
-        data = game.data.strip().split()
-        random.shuffle(data)
-        data = data[:25]
-        game.data = "\n".join(data)
-        game.save()
-        return HttpResponseRedirect("/finish/" + str(game.id) + "/")
+    #try:
+    data, data_in_bins, answer, lines, images_in_bins = \
+        Get_data_data_in_bins_answer(game.id, n_bins, n_pictures_per_bin, n_features)
+    print("game_data = ", len(data))
+    game.data = "\n".join(data)
+    game.change_data = False
+    game.save()
+    #except:
+    #    data = game.data.strip().split()
+    #    random.shuffle(data)
+    #    data = data[:25]
+    #    game.data = "\n".join(data)
+    #    game.save()
+    #    return HttpResponseRedirect("/finish/" + str(game.id) + "/")
 
     imgs = []
     for i in range(n_bins):
@@ -657,7 +645,10 @@ def SearchSessionStart(request, user_id, task_id):
     CreateGame(user_id, task)
     target_image_id = TakeImageIdFromTask(task)
     method_id = int(task.methods.strip().split("\t")[task.iteration])
+    #method_id = [3,1,2,4,5][task.iteration]
+
     game = Game.objects.filter(user_id=user_id, target_image_id=target_image_id, method_id=method_id,
                                task=task)[0]
+    game.save()
     game_id = game.id
     return render(request, 'search/start_search.html', locals())

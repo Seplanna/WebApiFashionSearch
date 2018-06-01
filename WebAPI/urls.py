@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^', include('shoes.urls')),
     url(r'^', include('search.urls')),
     url(r'^', include('final_stage.urls')),
+    url(r'^', include('interpretability.urls')),
 #    url(r'^ratings/', include('star_ratings.urls', namespace='ratings', app_name='ratings')),
 ]\
               + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)\

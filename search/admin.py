@@ -34,6 +34,12 @@ class AnswerAdmin (admin.ModelAdmin):
 
 admin.site.register(Answer, AnswerAdmin)
 
+class InterpretabilityAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Interpretability._meta.fields]
+    class Meta:
+        model = Interpretability
+
+admin.site.register(Interpretability, InterpretabilityAdmin)
 
 class OneImageInLine(admin.TabularInline):
     model = OneImage
@@ -43,9 +49,13 @@ class AnswerInLine(admin.TabularInline):
     model = Answer
     extra = 0
 
+class InterpretabilityInLine(admin.TabularInline):
+    model = Interpretability
+    extra = 0
+
 class GameAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Game._meta.fields]
-    inlines = [OneImageInLine, AnswerInLine]
+    inlines = [OneImageInLine, AnswerInLine, InterpretabilityInLine]
 
     class Meta:
         model = Game
@@ -71,9 +81,3 @@ class FeedbackAdmin(admin.ModelAdmin):
 
 admin.site.register(Feedback, FeedbackAdmin)
 
-class InterpretabilityAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Interpretability._meta.fields]
-    class Meta:
-        model = Interpretability
-
-admin.site.register(Interpretability, InterpretabilityAdmin)
