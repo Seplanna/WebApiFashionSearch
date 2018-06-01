@@ -1,0 +1,55 @@
+{% load static %}
+
+<!-- Custom styles -->
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!-- Bootstrap-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400" rel="stylesheet">
+    <!-- Custom styles -->
+     <link rel="stylesheet" href="{% static 'style2.css' %}">
+
+    <style>
+    </style>
+
+
+</head>
+
+
+<body class="general-container1">
+{% block content %}
+            <h1 class="title">Instructions</h1>
+            <p class="title1">
+                 In each step, the subset of 25 images is shown to you.<br>
+                 The shown images are structured by columns.<br>
+                 You are asked to understand the property that differentiates these columns.<br>
+                 I In one task you should perform 15 annotations. <br>
+                 Some questions are intended for quality assurance. Please answer them correctly.<br>
+            </p>
+
+
+                                <div>
+                                    <form action="/interpretability_task/{{game_id}}/" method="get" class="text-center"> {% csrf_token %}
+                                    <div>
+                                        <button type="submit" name="NEXT" class="btn btn-primary btn-orange btn-large btn-center">
+                                        Start the task!
+                                        </button>
+                                    </div>
+
+                                    </form>
+                                </div>
+
+
+
+
+                </div>
+              </div>
+            </div>
+
+        </div>
+
+
+{% endblock %}
+</body>

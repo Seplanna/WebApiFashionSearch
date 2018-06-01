@@ -1,0 +1,45 @@
+{% load static %}
+{% load ratings %}
+
+<!-- Custom styles -->
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!-- Bootstrap-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400" rel="stylesheet">
+    <!-- Custom styles -->
+     <link rel="stylesheet" href="{% static 'style1.css' %}">
+
+    <link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
+    <script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
+
+    <style>
+    </style>
+
+
+</head>
+
+
+
+{% block content %}
+
+        <div class="general-container1">
+            <div class="row">
+                <div class="container">
+                    <h1 class="title2">Thank you!</h1>
+                    <h1 class="title2">Thank you for paticipating in this user study!
+                        You did a a great job!
+                        We thank you for your time spent taking this survey.
+                        Your response has been recorded.
+
+                        Your MTurk completion code is:{{ task_code }}
+                    </h1>
+
+                </div>
+            </div>
+        </div>
+
+
+{% endblock %}
