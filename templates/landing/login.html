@@ -30,7 +30,7 @@
                 We ask you to log in to continue the survey, even if something goes wrong.
             </p>
             <div>
-                <form action="/create_account/0/" method="get" class="text-center"> {% csrf_token %}
+                <form action={{ redirect_to_create_account }} method="get" class="text-center"> {% csrf_token %}
                     <button type="submit" class="btn btn-primary btn-orange btn-margin">
                        I am a new user!
                     </button>

@@ -80,10 +80,10 @@
                 <div class="container" style="width:1358px;">
                     <form action="" method="post" class="text-center"> {% csrf_token %}
                         <div style="border:1px solid #dddddd;">
-                            <div class="title4"> If the columns don't differ push the button
+                            <p class="title1"> If the columns don't differ push the button
                                 "No difference".
-                                Otherwise, choose the closest column:
-                            </div>
+                                Otherwise, select the nearest column by {{ interpretability }}:
+                            </p>
                             {% for radio in form.Answer %}
                                 <div class="fake_img_no_border">
 
@@ -97,6 +97,20 @@
 
                         <button type="submit" class="btn btn-primary btn-orange">Submit</button>
                     </form>
+
+
+                     <form action="/best_image/{{game_id}}/" method="get" class="text-center"> {% csrf_token %}
+                        <div>
+                            <button type="submit" class="btn btn-primary btn-orange">
+                                Choose the closest image.
+                            </button>
+                        </div>
+
+                    </form>
+
+
+
+
                     <a href="https://drive.google.com/file/d/19aztztl3_if_YhlPWY0ItGiv38wkwzHB/view?usp=sharing"
                     title="Download movie" style="color:crimson", class="title1">Confused? Watch the video tutorial here.</a>
                 </div>
