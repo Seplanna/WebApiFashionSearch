@@ -227,7 +227,7 @@ def GhangeTheOrderOfTheImages(ims, lines):
 
 def TakeDatasetFromMethodNumber(number):
     mehtods = {0:"static/text_files/My.csv",
-               1: "static/text_files/PCA_AutoEncoder.csv",
+               1: "static/text_files/AutoEncoder.csv",
                2: "static/text_files/InfoGAN.csv",
                3: "static/text_files/PCA_AutoEncoder.csv",
                4: "static/text_files/PCA_GIST.csv",

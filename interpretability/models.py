@@ -5,6 +5,7 @@ class InterpretabilityGame(models.Model):
     target_image = models.CharField(max_length=128,default='')
     question_order = models.CharField(max_length=128,default='')
     iteration = models.IntegerField(default=0)
+    game_number = models.IntegerField(default=-1)
     code = models.IntegerField(default=-1)
     def __str__(self):
         return "%s" % (self.id)

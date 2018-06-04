@@ -39,6 +39,29 @@ def CreateInterpretabilityGame(user_id):
     game.save()
     return game
 
+def CreateInterpretabilityGameFromPool(user_id, n_plays_with_one_game, n_iterations):
+    if InterpretabilityGame.objects.filter(user_id=user_id).exists():
+        games = [game for game in InterpretabilityGame.objects.filter(user_id=user_id)]
+        for game in games:
+            if game.iteration < 20:
+                return game
+    existing_games = InterpretabilityGame.objects.filter(game_number = -1)
+    free_games = [game.id for game in existing_games if
+                  len(InterpretabilityGame.objects.filter(game_number=game.id, iteration=n_iterations)) < n_plays_with_one_game]
+    game_id = random.choice(free_games)
+    target_image_id = InterpretabilityGame.objects.get(id=game_id).target_image
+
+    game = InterpretabilityGame.objects.create(user_id=user_id, target_image=target_image_id, game_number = game_id)
+    questions_order = []
+    for i in range(1,5):
+        l = [i*10 + f for f in range(n_features)]
+        questions_order += l
+    random.shuffle(questions_order)
+    questions_order.append(50)
+    game.question_order = "_".join(str(s) for s in questions_order)
+    game.save()
+    return game
+
 
 def EndInterpretabilityTask(request, game_id):
     task_code = np.random.randint(0, 1000000)
@@ -113,6 +136,7 @@ def InterpretabilityFunction(request, game_id):
 
 def StartInterpretabilityTask(request, user_id):
     game = CreateInterpretabilityGame(user_id)
+    #game = CreateInterpretabilityGameFromPool(user_id, 1, 21)
     game_id = game.id
     return render(request, 'interpretability/start_interpretability.html', locals())
 
