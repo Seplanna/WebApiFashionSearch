@@ -59,11 +59,11 @@
                     </form>
                 </div>
             {% endif %}
-
         </div>
 
         <div >
             <div class="row">
+
                 <div class="container" style="width:1358px">
 
                     {% for line in imgs %}
@@ -82,7 +82,17 @@
                         <div style="border:1px solid #dddddd;">
                             <p class="title1"> If the columns don't differ push the button
                                 "No difference".
-                                Otherwise, select the nearest column by {{ interpretability }}:
+                                Otherwise, select the nearest column
+
+                                        {% if choose_targert_image %}
+                                            to
+                                            </p>
+                                            <div class="fake_img_no_border">
+                                                <img src="{{ target_image_url }}" class="img-responsive">
+                                            </div>
+                                            <p class="title1">
+                                        {% endif %}
+                                by {{ interpretability }}:
                             </p>
                             {% for radio in form.Answer %}
                                 <div class="fake_img_no_border">
@@ -98,21 +108,23 @@
                         <button type="submit" class="btn btn-primary btn-orange">Submit</button>
                     </form>
 
+                     {% if buy_button %}
+                         <form action="/best_image/{{game_id}}/" method="get" class="text-center"> {% csrf_token %}
+                            <div>
+                                <button type="submit" class="btn btn-primary btn-orange">
+                                    Choose the closest image.
+                                </button>
+                            </div>
 
-                     <form action="/best_image/{{game_id}}/" method="get" class="text-center"> {% csrf_token %}
-                        <div>
-                            <button type="submit" class="btn btn-primary btn-orange">
-                                Choose the closest image.
-                            </button>
-                        </div>
-
-                    </form>
-
-
+                        </form>
 
 
-                    <a href="https://drive.google.com/file/d/19aztztl3_if_YhlPWY0ItGiv38wkwzHB/view?usp=sharing"
-                    title="Download movie" style="color:crimson", class="title1">Confused? Watch the video tutorial here.</a>
+
+
+
+                        <a href="https://drive.google.com/file/d/19aztztl3_if_YhlPWY0ItGiv38wkwzHB/view?usp=sharing"
+                        title="Download movie" style="color:crimson", class="title1">Confused? Watch the video tutorial here.</a>
+                    {% endif %}
                 </div>
 
 
