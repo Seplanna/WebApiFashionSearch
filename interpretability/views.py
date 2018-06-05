@@ -1,11 +1,11 @@
 from django.shortcuts import render, HttpResponseRedirect
 from .forms import InterpretabilityForm, \
-    InterpretabilityGame
+    InterpretabilityGame, Interpretability
 from shoes.views import TakeImageIdFromTask
 from landing.forms import Login, LoginForm, AssessorProfile, AssessorProfileForm
 
 from search.views import TakeDatasetFromMethodNumber, GetFeturesFromText, \
-    Real1_one_feature_from_given_features, GetFeaturesForOneImage
+    Real1_one_feature_from_given_features, GetFeaturesForOneImage, AnswerForm
 import os
 import numpy as np
 import random
@@ -50,8 +50,10 @@ def CreateInterpretabilityGameFromPool(user_id, n_plays_with_one_game, n_iterati
                   len(InterpretabilityGame.objects.filter(game_number=game.id, iteration=n_iterations)) < n_plays_with_one_game]
     game_id = random.choice(free_games)
     target_image_id = InterpretabilityGame.objects.get(id=game_id).target_image
-
-    game = InterpretabilityGame.objects.create(user_id=user_id, target_image=target_image_id, game_number = game_id)
+    image_to_choose = random.choice(os.listdir("static/media/product/"))
+    image_to_choose = os.path.basename(image_to_choose)
+    game = InterpretabilityGame.objects.create(user_id=user_id, target_image=target_image_id, game_number = game_id,
+                                               image_to_choose = image_to_choose)
     questions_order = []
     for i in range(1,5):
         l = [i*10 + f for f in range(n_features)]
@@ -62,6 +64,12 @@ def CreateInterpretabilityGameFromPool(user_id, n_plays_with_one_game, n_iterati
     game.save()
     return game
 
+def RecieveTheWrightAnswer(image,data, data_in_bins):
+    for bin in range(n_bins):
+        for im in data_in_bins[bin]:
+            if data[im].split("_")[-1] == os.path.basename(image):
+                return bin
+
 
 def EndInterpretabilityTask(request, game_id):
     task_code = np.random.randint(0, 1000000)
@@ -69,6 +77,74 @@ def EndInterpretabilityTask(request, game_id):
     game.code = task_code
     game.save()
     return render(request, 'interpretability/end_interpretability.html', locals())
+
+def ChooseTheColumn(request, game_id):
+    buy_button = False
+    choose_targert_image = True
+
+    game = InterpretabilityGame.objects.get(id=game_id)
+    print("iteration_number = ", game.id)
+    iteration = game.iteration
+    method_feature = int(game.question_order.split("_")[iteration])
+    method_id = method_feature / 10
+    feature_n = method_feature % 10
+    data1 = open(TakeDatasetFromMethodNumber(method_id)).read()
+    features, data = GetFeturesFromText(data1)
+    target_image = game.target_image
+    if (method_id == 5):
+        target_image = "8008094.585.jpg"
+    point_features = GetFeaturesForOneImage(target_image, data1)
+    print("point features = ", point_features)
+
+    images_in_bins, data_in_bins = \
+        Real1_one_feature_from_given_features(features,
+                                              data,
+                                              n_bins,
+                                              n_pictures_per_bin,
+                                              feature_n,
+                                              point_features,
+                                              1)
+
+    class Image:
+        def __init__(self, url):
+            self.url = url
+
+    class Image_:
+        def __init__(self, url):
+            self.image = Image(url)
+
+    imgs = []
+    for bin in range(n_bins):
+        line = []
+        for im_n in images_in_bins[bin]:
+            im_url = "/media/product/" + data[im_n].split("_")[-1]
+            line.append(Image_(im_url))
+        imgs.append(line)
+
+    target_image_url = Image_("/media/product/" + game.image_to_choose).image.url
+    values = range(n_bins)
+    session_key = request.session.session_key
+    if not session_key:
+        request.session.cycle_key()
+
+    interpretability_class = Interpretability.objects.get(game_id=game, iteration=game.iteration)
+    interpretability = interpretability_class.property
+    form = AnswerForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            final_score = form.cleaned_data['Answer']
+            interpretability_class.given_answer = int(final_score)
+            interpretability_class.wright_answer = RecieveTheWrightAnswer(game.image_to_choose,
+                                                                          data, data_in_bins)
+            interpretability_class.save()
+            game.iteration += 1
+            game.save()
+            return HttpResponseRedirect("/interpretability_task/" + game_id + "/")
+
+
+    return render(request, 'search/search.html', locals())
+
+
 
 def InterpretabilityFunction(request, game_id):
     print("START")
@@ -126,17 +202,16 @@ def InterpretabilityFunction(request, game_id):
         new_form.feature_n = feature_n
         new_form.method_id = method_id
         new_form.save()
-        game.iteration += 1
-        game.save()
-        if (game.iteration > n_features * 4):
+        if (game.iteration >= n_features * 4):
             return HttpResponseRedirect("/end_interpretability_task/" + game_id + "/")
-        return HttpResponseRedirect("/interpretability_task/" + game_id + "/")
+        return HttpResponseRedirect("/choose_column/" + game_id + "/")
+
     return render(request, 'search/search_interpretability.html', locals())
 
 
 def StartInterpretabilityTask(request, user_id):
-    game = CreateInterpretabilityGame(user_id)
-    #game = CreateInterpretabilityGameFromPool(user_id, 1, 21)
+    #game = CreateInterpretabilityGame(user_id)
+    game = CreateInterpretabilityGameFromPool(user_id, 1, 21)
     game_id = game.id
     return render(request, 'interpretability/start_interpretability.html', locals())
 

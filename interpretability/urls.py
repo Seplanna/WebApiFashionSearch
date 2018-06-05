@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^create_account_Interpretability/(?P<signal>\w+)/$', views.CreateAccountInterpretability, name='login'),
     url(r'^landing_Interpretability/(?P<form_id>\w+)/$', views.landingInterpretability, name='landing'),
     url(r'^interpretability_task/(?P<game_id>\w+)/$', views.InterpretabilityFunction, name='Interpretability'),
+    url(r'^choose_column/(?P<game_id>\w+)/$', views.ChooseTheColumn, name='Interpretability'),
     url(r'^start_interpretability_task/(?P<user_id>\w+)/$', views.StartInterpretabilityTask, name='StartInterpretability'),
     url(r'^end_interpretability_task/(?P<game_id>\w+)/$', views.EndInterpretabilityTask, name='EndInterpretability')
 ]
