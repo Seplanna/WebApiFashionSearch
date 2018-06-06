@@ -27,8 +27,10 @@ def CreateInterpretabilityGame(user_id):
         for game in games:
             if game.iteration < 20:
                 return game
+    image_to_choose = random.choice(os.listdir("static/media/product/"))
+    image_to_choose = os.path.basename(image_to_choose)
 
-    game = InterpretabilityGame.objects.create(user_id=user_id, target_image=target_image_id)
+    game = InterpretabilityGame.objects.create(user_id=user_id, target_image=target_image_id, image_to_choose = image_to_choose)
     questions_order = []
     for i in range(1,5):
         l = [i*10 + f for f in range(n_features)]
@@ -210,8 +212,8 @@ def InterpretabilityFunction(request, game_id):
 
 
 def StartInterpretabilityTask(request, user_id):
-    #game = CreateInterpretabilityGame(user_id)
-    game = CreateInterpretabilityGameFromPool(user_id, 1, 21)
+    game = CreateInterpretabilityGame(user_id)
+    #game = CreateInterpretabilityGameFromPool(user_id, 1, 21)
     game_id = game.id
     return render(request, 'interpretability/start_interpretability.html', locals())
 

@@ -7,13 +7,13 @@ from django.utils.safestring import mark_safe
 class AnswerForm(forms.Form):
 
     CHOICES = [
-                ('-2', "No difference"),
+
                 ('0', '1st Column'),
                ('1', '2nd Column'),
                ('2', '3rd Column'),
                ('3', '4th Column'),
-               ('4', '5th Column'),
-               ('-1', "Don't know")]
+               ('4', '5th Column')
+    ]
 
     Answer = forms.ChoiceField(choices=CHOICES,
                                widget=forms.RadioSelect(
